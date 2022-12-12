@@ -43,7 +43,7 @@ else
 fi
 
 # Prompt the user to choose which GPU to blacklist
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N] " choice
+read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/No] " choice
 
 case $choice in
   A|a)
@@ -61,10 +61,10 @@ case $choice in
     echo "options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA GPUs have been blacklisted"
     ;;
-  *)
+  No|no)
     # Invalid choice
     echo "Invalid choice"
-    exit 1
+    break
     ;;
 esac
 
@@ -96,7 +96,7 @@ fi
 echo "Initramfs/mkinitcpio updated successfully"
 
 
-read -p "Do you want the script to configure grug for you for (I)ntel or (A)md" choice
+read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" choice
 case $choice in
   I|i)
     # Blacklist AMD GPUs
@@ -150,8 +150,5 @@ fi
 exit
     ;;
   No/no)
-    # Invalid choice
-    echo "goodbye"
-    exit 1
     ;;
 esac
