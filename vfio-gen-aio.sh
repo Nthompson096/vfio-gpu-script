@@ -96,7 +96,7 @@ fi
 echo "Initramfs/mkinitcpio updated successfully"
 
 
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [I/A/No] " choice
+read -p "Do you want the script to configure grug for you for (I)ntel or (A)md" choice
 case $choice in
   I|i)
     # Blacklist AMD GPUs
