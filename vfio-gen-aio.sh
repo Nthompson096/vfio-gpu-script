@@ -82,18 +82,6 @@ echo "Creating vfio-pci device for $pci_id..."
 echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
 
 
-# read -p "Do you want to insert softdep nvidia pre: vfio-pci for nvida [y/n] " answer softdep
-
-# if [ "$answer" = "y" ]; then
-#   # code to execute if the answer is "yes"
-#   echo "creatng pre: vfio-pci for nvida for $softdep..."
-#   printf "\npre: vfio-pci for nvida for $softdep"
-# else
-#   # code to execute if the answer is "no"
-#   echo "Continuing."
-# fi
-
-
 read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/No] " softdep
 
 case $softdep in
