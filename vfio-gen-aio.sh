@@ -57,8 +57,8 @@ case $choice in
   N|n)
     # Blacklist NVIDIA GPUs
     echo "blacklist nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
-       echo "blacklist lbm-nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
-    options "nouveau modeset=0" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist lbm-nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA GPUs have been blacklisted"
     ;;
   *)
@@ -69,7 +69,7 @@ case $choice in
 esac
 
 # Use lspci to list the VGA devices
-lspci -nn | grep -i "VGA"
+lspci -nn | grep "VGA" && lspci -nn | grep "Audio"
 
 # Prompt the user to enter the PCI ID of a NVIDIA or AMD graphics card
 read -p "Enter the PCI ID of your NVIDIA or AMD graphics card: " pci_id
@@ -96,9 +96,10 @@ fi
 echo "Initramfs/mkinitcpio updated successfully"
 
 
-read -p "Do you want to create grub configs for (A)MD or (I)NTEL or (N)o. [I/A/N] " choice
+read -p "Do you want to blacklist AMD or NVIDIA GPUs? [I/A/No] " choice
 case $choice in
   I|i)
+    # Blacklist AMD GPUs
 echo "This will configure your grub config for virtualization for AMD."
 
 cp /etc/default/grub /etc/default/grub.bak &&
@@ -123,6 +124,8 @@ fi
 exit
     ;;
   A|a)
+    # Blacklist NVIDIA GPUs
+  
     cp /etc/default/grub /etc/default/grub.bak &&
 
     echo "This will configure your grub config for virtualization for Intel."
@@ -146,7 +149,7 @@ if [ $REBOOT = "Y" ]
 fi
 exit
     ;;
-  N/n)
+  No/no)
     # Invalid choice
     echo "goodbye"
     exit 1
