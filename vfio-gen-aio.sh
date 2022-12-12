@@ -48,7 +48,7 @@ read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/No] " choice
 case $choice in
   A|a)
     # Blacklist AMD GPUs
-   echo "blacklist amdgpu" >> /etc/modprobe.d/blacklist-amd.conf
+   echo "blacklist amdgpu" > /etc/modprobe.d/blacklist-amd.conf
    echo "blacklist amdkfd" >> /etc/modprobe.d/blacklist-amd.conf
    echo "blacklist radeon" >> /etc/modprobe.d/blacklist-amd.conf
 
@@ -56,11 +56,12 @@ case $choice in
     ;;
   N|n)
     # Blacklist NVIDIA GPUs
-    echo "blacklist nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist nouveau" > /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist lbm-nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist snd_hda_intel" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist nvidia" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist nvidiafb" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist nvidia_drm" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA GPUs have been blacklisted"
     ;;
@@ -82,12 +83,24 @@ echo "Creating vfio-pci device for $pci_id..."
 echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
 
 
-read -p "Want to create a softdep for Nvidia GPU's? [Y/No] " softdep
+# read -p "Do you want to insert softdep nvidia pre: vfio-pci for nvida [y/n] " answer softdep
+
+# if [ "$answer" = "y" ]; then
+#   # code to execute if the answer is "yes"
+#   echo "creatng pre: vfio-pci for nvida for $softdep..."
+#   printf "\npre: vfio-pci for nvida for $softdep"
+# else
+#   # code to execute if the answer is "no"
+#   echo "Continuing."
+# fi
+
+
+read -p "Do you want to create pre: vfio-pci for nvida GPU's? [Y/No] " softdep
 
 case $softdep in
   Y|y)
     # Blacklist AMD GPUs
-  echo -n "pre: vfio-pci for nvida" >> /etc/modprobe.d/vfio.conf
+  echo -n "softdep pre: vfio-pci for nvida" >> /etc/modprobe.d/vfio.conf
     ;;
   No|no)
     # Invalid choice
