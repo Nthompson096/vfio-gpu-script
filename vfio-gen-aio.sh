@@ -96,11 +96,10 @@ fi
 echo "Initramfs/mkinitcpio updated successfully"
 
 
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [I/A/N] " choice
+read -p "Do you want to create grub configs for (A)MD or (I)NTEL or (N)o. [I/A/N] " choice
 case $choice in
   I|i)
-    # Blacklist AMD GPUs
-echo "This will configure your grub config for virtualization."
+echo "This will configure your grub config for virtualization for AMD."
 
 cp /etc/default/grub /etc/default/grub.bak &&
 
@@ -124,11 +123,9 @@ fi
 exit
     ;;
   A|a)
-    # Blacklist NVIDIA GPUs
-  
     cp /etc/default/grub /etc/default/grub.bak &&
 
-    echo "This script will configure your grub config for virtualization."
+    echo "This will configure your grub config for virtualization for Intel."
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
