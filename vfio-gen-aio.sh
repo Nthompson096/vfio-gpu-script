@@ -94,3 +94,60 @@ dracut -f
 fi
 
 echo "Initramfs/mkinitcpio updated successfully"
+
+read -p "Do you want to automatically generate grub-config for Intel (I) or AMD (A)? [I/A] " choice
+case $choice in
+  I|i)
+    # Blacklist AMD GPUs
+   echo "want a blue cookie"
+    ;;
+  A|a)
+    # Blacklist NVIDIA GPUs
+echo "This will configure your grub config for virtualization for AMD."
+
+cp /etc/default/grub /etc/default/grub.bak &&
+
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+#adds amd_iommu=on and iommu=pt to the grub config
+GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
+sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
+
+grub-mkconfig -o /boot/grub/grub.cfg     
+sleep 5s
+clear            
+echo
+echo "Grub bootloader has been modified successfully, reboot time!"
+echo "press Y to reboot now and n to reboot later and inspect your config."
+read REBOOT
+
+if [ $REBOOT = "Y" ]
+        then
+                reboot
+fi
+exit
+    ;;
+  *)
+echo "This will configure your grub config for virtualization for intel."
+
+cp /etc/default/grub /etc/default/grub.bak
+
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+#adds amd_iommu=on and iommu=pt to the grub config
+GRUB+=" intel_iommu=on iommu=pt\""
+sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
+
+grub-mkconfig -o /boot/grub/grub.cfg
+sleep 5s
+clear
+echo
+echo "Grub bootloader has been modified successfully, reboot time!"
+echo "press Y to reboot now and n to reboot later and inspect your config."
+read REBOOT
+
+if [ $REBOOT = "y" ]
+        then                                                                                                                                                                                                                                  
+                reboot                                                                                                                                                                                                                        
+fi
+    exit 1
+    ;;
+esac
