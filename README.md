@@ -7,4 +7,4 @@ simply clone this archive (or download this script), then make this script execu
 
 What you'll need, and what I'll add in later.
 
-virt-manager, qemu-full, a rom for your GPU; you cna use a rom dumping utility or simply look on the internet (you can also check my previous repo on how to do so).
+virt-manager, qemu-full, a rom for your GPU; you cna use a rom dumping utility or simply look on the internet [you can also check my previous repo on how to do so](https://github.com/Nthompson096/KVM-GPU-Passthrough#creating-your-rom).
