@@ -75,7 +75,7 @@ esac
 lspci -nn | grep "VGA" && lspci -nn | grep "Audio"
 
 # Prompt the user to enter the PCI ID of a NVIDIA or AMD graphics card
-read -p "Enter the PCI ID of your NVIDIA or AMD graphics card: " pci_id
+read -p "Enter the PCI ID of your NVIDIA or AMD graphics card, IE xxxx:xxxx,xxxx:xxxx: " pci_id
 
 # Use the entered PCI ID to create a vfio-pci device for the graphics card
 echo "Creating vfio-pci device for $pci_id..."
