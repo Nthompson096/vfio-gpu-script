@@ -58,7 +58,10 @@ case $choice in
     # Blacklist NVIDIA GPUs
     echo "blacklist nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist lbm-nouveau" >> /etc/modprobe.d/blacklist-nvidia.conf
-    echo "options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist snd_hda_intel" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist nvidia" >> /etc/modprobe.d/blacklist-nvidia.conf
+    echo "blacklist nvidia_drm" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA GPUs have been blacklisted"
     ;;
   No|no)
