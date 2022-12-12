@@ -63,7 +63,7 @@ case $choice in
     ;;
   No|no)
     # Invalid choice
-    echo "Invalid choice"
+    echo "Not creating a blacklist."
     break
     ;;
 esac
@@ -149,6 +149,6 @@ if [ $REBOOT = "Y" ]
 fi
 exit
     ;;
-  No/no)
+  N/n)
     ;;
 esac
