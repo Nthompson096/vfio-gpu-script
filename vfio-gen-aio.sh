@@ -82,7 +82,7 @@ echo "Creating vfio-pci device for $pci_id..."
 echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
 
 
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/No] " softdep
+read -p "Want to create a softdep for Nvidia GPU's? [Y/No] " softdep
 
 case $softdep in
   Y|y)
