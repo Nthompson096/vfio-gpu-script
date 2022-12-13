@@ -83,12 +83,12 @@ echo "Creating vfio-pci device for $pci_id..."
 echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
 
 
-read -p "Do you want to create pre: vfio-pci for nvida GPU's? [Y/No] " softdep
+read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep
 
 case $softdep in
   Y|y)
     # Blacklist AMD GPUs
-  echo -n "softdep pre: vfio-pci for nvida" >> /etc/modprobe.d/vfio.conf
+  echo -n "softdep pre: vfio-pci for nvidia" >> /etc/modprobe.d/vfio.conf
     ;;
   No|no)
     # Invalid choice
@@ -150,21 +150,21 @@ exit
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
+GRUB+=" intel_iommu=on iommu=pt\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
-grub-mkconfig -o /boot/grub/grub.cfg     
+grub-mkconfig -o /boot/grub/grub.cfg
 sleep 5s
-clear            
+clear
 echo
 echo "Grub bootloader has been modified successfully, reboot time!"
 echo "press Y to reboot now and n to reboot later."
 read REBOOT
 
-if [ $REBOOT = "Y" ]
-        then
-                reboot
-fi
+if [ $REBOOT = "y" ]
+        then                                                                                                                                                                                                                                  
+                reboot                                                                                                                                                                                                                        
+fi                                                                                                                                                                                                                                            
 exit
     ;;
   N/n)
