@@ -52,9 +52,9 @@ else
 fi
 
 # Prompt the user to choose which GPU to blacklist
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/No] " choice
+read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/No] " gblacklist
 
-case $choice in
+case $gblacklist in
   A|a)
     # Blacklist AMD GPUs
    echo "blacklist amdgpu" > /etc/modprobe.d/blacklist-amd.conf
@@ -81,6 +81,9 @@ case $choice in
     ;;
 esac
 
+
+#!/bin/bash
+
 # Use lspci to list the VGA devices
 lspci -nn | grep "VGA" && lspci -nn | grep "Audio"
 
@@ -104,11 +107,11 @@ done
 read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep
 
 case $softdep in
-  Y|y)
+  Y|y|Yes|yes)
     # Blacklist AMD GPUs
   echo -n "softdep pre: vfio-pci for nvidia" >> /etc/modprobe.d/vfio.conf
     ;;
-  No|no)
+  No|no|N|n)
     # Invalid choice
     echo "Not creating a softdep."
     break
@@ -132,8 +135,8 @@ fi
 echo "Initramfs/mkinitcpio updated successfully"
 
 
-read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" choice
-case $choice in
+read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
+case $cpu in
   I|i)
 echo "This will configure your grub config for virtualization for Intel."
 
@@ -183,6 +186,8 @@ if [ $REBOOT = "Y" ]
 fi
 exit
     ;;
-  N/n)
+  N|n|No|no)
+   clear &&
+    printf "goodbye, and be sure to check your grub in /etc/default/grub\nand your vfio in /etc/modprobe/vfio.conf \nwith cat if you made changes"
     ;;
-esac
+   esac
