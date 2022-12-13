@@ -9,7 +9,8 @@ fi
 if [ -f /etc/default/grub.bak ]; then
   read -p "Do you want to revert grub? [y/n] " answer
   if [ "$answer" == "y" ]; then
-    mv /etc/default/grub.bak /etc/default/grub
+    mv /etc/default/grub.bak /etc/default/grub &&
+    grub-mkconfig -o /boot/grub/grub.cfg   
     echo "grub reverted"
   fi
 fi
