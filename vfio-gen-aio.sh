@@ -6,6 +6,14 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+if [ -f /etc/default/grub.bak ]; then
+  read -p "Do you want to revert grub? [y/n] " answer
+  if [ "$answer" == "y" ]; then
+    mv /etc/default/grub.bak /etc/default/grub
+    echo "grub reverted"
+  fi
+fi
+
 if [ -f /etc/modprobe.d/blacklist-nvidia.conf ]; then
   read -p "Do you want to delete the NVIDIA blacklist? [y/n] " answer
   if [ "$answer" == "y" ]; then
@@ -148,21 +156,21 @@ exit
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" amd_iommu=on iommu=pt\""
+GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
-grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg     
 sleep 5s
-clear
+clear            
 echo
 echo "Grub bootloader has been modified successfully, reboot time!"
 echo "press Y to reboot now and n to reboot later."
 read REBOOT
 
-if [ $REBOOT = "y" ]
-        then                                                                                                                                                                                                                                  
-                reboot                                                                                                                                                                                                                        
-fi                                                                                                                                                                                                                                            
+if [ $REBOOT = "Y" ]
+        then
+                reboot
+fi
 exit
     ;;
   N/n)
