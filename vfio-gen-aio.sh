@@ -123,7 +123,7 @@ cp /etc/default/grub /etc/default/grub.bak &&
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" amd_iommu=on iommu=pt\""
+GRUB+=" intel_iommu=on iommu=pt\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -148,7 +148,7 @@ exit
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" intel_iommu=on iommu=pt\""
+GRUB+=" amd_iommu=on iommu=pt\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg
