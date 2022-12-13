@@ -81,15 +81,27 @@ case $choice in
     ;;
 esac
 
+
+#!/bin/bash
+
 # Use lspci to list the VGA devices
 lspci -nn | grep "VGA" && lspci -nn | grep "Audio"
 
 # Prompt the user to enter the PCI ID of a NVIDIA or AMD graphics card
 read -p "Enter the PCI ID of your NVIDIA or AMD graphics card, IE xxxx:xxxx,xxxx:xxxx: " pci_id
 
-# Use the entered PCI ID to create a vfio-pci device for the graphics card
-echo "Creating vfio-pci device for $pci_id..."
-echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
+# Ask the user if they want to input the values of $pci_id into vfio.conf
+echo "Do you want to input the values of $pci_id into vfio.conf?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) 
+            # Use the entered PCI ID to create a vfio-pci device for the graphics card
+            echo "Creating vfio-pci device for $pci_id..."
+            echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
+            break;;
+        No ) exit;;
+    esac
+done
 
 
 read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep
