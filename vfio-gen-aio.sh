@@ -205,7 +205,7 @@ exit
   N|n|No|no)
    clear &&
     printf "goodbye, and be sure to check your grub in /etc/default/grub\nand your vfio in /etc/modprobe/vfio.conf \nwith cat if you made changes.\ngrub's revert file is saved as /etc/default/grub.bak"
-    printf "\nto remove the blacklist and vfio.conf feel free to manually remove it yourself\nor do it manually."
+    printf "\nto remove the blacklist and vfio.conf feel free to re-run this script to remove it\nor do it manually."
     printf "\nthese are located in /etc/modprobe/"
     ;;
    esac
