@@ -118,21 +118,23 @@ case $softdep in
     ;;
 esac
 
+echo "Do you want to update your initramfs/mkinitcpio?"
+read -p "Enter Y to update, or N to cancel: " confirm
 
-if [ -f /etc/debian_version ]; then
-update-initramfs -u
+if [[ $confirm == "Y" || $confirm == "y" ]]; then
+  if [ -f /etc/debian_version ]; then
+    update-initramfs -u
+  elif [ -f /etc/arch-release ]; then
+    mkinitcpio -P
+  elif [ -f /etc/redhat-release ]; then
+    dracut -f
+  fi
+
+  echo "Initramfs/mkinitcpio updated successfully"
+else
+  echo "Initramfs/mkinitcpio update cancelled"
 fi
 
-if [ -f /etc/arch-release ]; then
-mkinitcpio -P
-fi
-
-
-if [ -f /etc/redhat-release ]; then
-dracut -f
-fi
-
-echo "Initramfs/mkinitcpio updated successfully"
 
 
 read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
