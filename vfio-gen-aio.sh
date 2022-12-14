@@ -152,9 +152,8 @@ sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 sleep 5s
 clear
-echo
-echo "Grub bootloader has been modified successfully, reboot time!"
-echo "press Y to reboot now and n to reboot later."
+printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
+printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
 if [ $REBOOT = "y" ]
@@ -177,9 +176,8 @@ sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg     
 sleep 5s
 clear            
-echo
-echo "Grub bootloader has been modified successfully, reboot time!"
-echo "press Y to reboot now and n to reboot later."
+printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
+printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
 if [ $REBOOT = "Y" ]
@@ -190,6 +188,8 @@ exit
     ;;
   N|n|No|no)
    clear &&
-    printf "goodbye, and be sure to check your grub in /etc/default/grub\nand your vfio in /etc/modprobe/vfio.conf \nwith cat if you made changes"
+    printf "goodbye, and be sure to check your grub in /etc/default/grub\nand your vfio in /etc/modprobe/vfio.conf \nwith cat if you made changes.\ngrub's revert file is saved as /etc/default/grub.bak"
+    printf "\nto remove the blacklist and vfio.conf feel free to manually remove it yourself\nor do it manually."
+    printf "\nthese are located in /etc/modprobe/"
     ;;
    esac
