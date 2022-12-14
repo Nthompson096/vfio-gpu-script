@@ -134,7 +134,7 @@ if [[ $confirm == "Y" || $confirm == "y" ]]; then
 else
   echo "Initramfs/mkinitcpio update cancelled"
 fi
-
+    
 
 
 read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
@@ -142,7 +142,15 @@ case $cpu in
   I|i)
 echo "This will configure your grub config for virtualization for Intel."
 
-cp /etc/default/grub /etc/default/grub.bak &&
+# Check if a copy of the grub configuration file already exists
+    if ls /etc/default/ | grep -q "grub.bak"; then
+      # If the file exists, skip it
+      echo "A backup of the grub configuration file already exists. Skipping."
+    else
+      # If the file does not exist, create a backup
+      cp /etc/default/grub /etc/default/grub.bak
+      echo "Backed up the grub configuration file to /etc/default/grub.bak"
+    fi
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
@@ -163,8 +171,16 @@ fi
 exit
     ;;
   A|a)
-  
-    cp /etc/default/grub /etc/default/grub.bak &&
+
+# Check if a copy of the grub configuration file already exists
+    if ls /etc/default/ | grep -q "grub.bak"; then
+      # If the file exists, skip it
+      echo "A backup of the grub configuration file already exists. Skipping."
+    else
+      # If the file does not exist, create a backup
+      cp /etc/default/grub /etc/default/grub.bak
+      echo "Backed up the grub configuration file to /etc/default/grub.bak"
+    fi
 
     echo "This will configure your grub config for virtualization for AMD."
 
