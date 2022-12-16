@@ -10,7 +10,7 @@ if [ -f /etc/default/grub.bak ]; then
   read -p "Do you want to revert grub? [y/n] " answer
   if [ "$answer" == "y" ]; then
     mv /etc/default/grub.bak /etc/default/grub &&
-    grub-mkconfig -o /boot/grub/grub.cfg   
+   grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null   
     echo "grub reverted"
   fi
 fi
@@ -79,26 +79,44 @@ case $gblacklist in
     echo "Not creating a blacklist."
     break
     ;;
+*)
+    # Invalid choice
+    echo "Not creating a blacklist."
+    break
+    ;;
 esac
 
-# Use lspci to list the VGA devices
-lspci -nn | grep "VGA" && lspci -nn | grep "Audio"
+read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (Y/N) " yn
 
-# Prompt the user to enter the PCI ID of a NVIDIA or AMD graphics card
-read -p "Enter the PCI ID of your NVIDIA or AMD graphics card, IE xxxx:xxxx,xxxx:xxxx: " pci_id
+case $yn in
+   Y) lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
+    read -p "Enter the PCI ID of your NVIDIA or AMD graphics card (format: xxxx:xxxx,xxxx:xxxx): " pci_id
 
-# Ask the user if they want to input the values of $pci_id into vfio.conf
-echo "Do you want to input the values of $pci_id into vfio.conf?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) 
-            # Use the entered PCI ID to create a vfio-pci device for the graphics card
+    # Check if the PCI ID entered by the user is not empty
+    if [ -z "$pci_id" ]; then
+      # If the PCI ID is empty, display an error message and exit the script
+      echo "Error: PCI ID cannot be empty."
+      exit 1
+    fi
+
+    # Append the options vfio-pci line to /etc/default/grub using sed
+    # The -i option is used to edit the file in place and the -e option is used to specify the sed script
             echo "Creating vfio-pci device for $pci_id..."
             echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
-            break;;
-        No ) exit;;
-    esac
-done
+            break
+            ;;
+  N)
+    # If the user does not want to insert the PCI ID into GRUB, exit the script
+    echo "Not inserting PCI ID into vfio config, have a nice day."
+    break
+    ;;
+
+  *)
+    # If the user enters an invalid choice, display an error message and exit the script
+    echo "Not inserting PCI ID into vfio config, have a nice day."
+    break
+    ;;
+esac
 
 
 read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep
@@ -113,9 +131,14 @@ case $softdep in
     echo "Not creating a softdep."
     break
     ;;
+   *)
+    # Invalid choice
+    echo "Not creating a softdep."
+    break
+    ;;
 esac
 
-echo "Do you want to update your initramfs/mkinitcpio?"
+echo "Do you want to update your initramfs/mkinitcpio? required for vfio.conf"
 read -p "Enter Y to update, or N to cancel: " confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
@@ -151,10 +174,10 @@ echo "This will configure your grub config for virtualization for Intel."
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" intel_iommu=on iommu=pt\""
+GRUB+=" intel_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
-grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
 sleep 5s
 clear
 printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
@@ -165,7 +188,7 @@ if [ $REBOOT = "y" ]
         then                                                                                                                                                                                                                                  
                 reboot                                                                                                                                                                                                                        
 fi                                                                                                                                                                                                                                            
-exit
+break
     ;;
   A|a)
 
@@ -186,7 +209,7 @@ GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2
 GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
-grub-mkconfig -o /boot/grub/grub.cfg     
+grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&   
 sleep 5s
 clear            
 printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
@@ -197,12 +220,80 @@ if [ $REBOOT = "Y" ]
         then
                 reboot
 fi
-exit
+break
     ;;
   N|n|No|no)
-   clear &&
-    printf "goodbye, and be sure to check your grub in /etc/default/grub\nand your vfio in /etc/modprobe/vfio.conf \nwith cat if you made changes.\ngrub's revert file is saved as /etc/default/grub.bak"
-    printf "\nto remove the blacklist and vfio.conf feel free to re-run this script to remove it\nor do it manually."
-    printf "\nthese are located in /etc/modprobe/"
-    ;;
+   clear
+    break;;
    esac
+
+# Ask the user if they want to input the PCI ID into GRUB
+read -p "Would you like to insert your PCI ID into GRUB? (Y/N) " grubpci
+
+case $grubpci in
+  Y|y|Yes|yes)
+      if ls /etc/default/ | grep -q "grub.bak"; then
+      # If the file exists, skip it
+      echo "A backup of the grub configuration file already exists. Skipping."
+    else
+      # If the file does not exist, create a backup
+      cp /etc/default/grub /etc/default/grub.bak
+      echo "Backed up the grub configuration file to /etc/default/grub.bak"
+    fi
+    sleep 5s
+    lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
+    read -p "Enter the PCI ID of your NVIDIA or AMD graphics card (format: xxxx:xxxx,xxxx:xxxx): " pci_id
+
+    # Check if the PCI ID entered by the user is not empty
+    if [ -z "$pci_id" ]; then
+      # If the PCI ID is empty, display an error message and exit the script
+      echo "Error: PCI ID cannot be empty."
+      exit 1
+    fi
+
+    # Use the entered PCI ID to create a vfio-pci device for the graphics card
+    echo "Creating vfio-pci device for $pci_id..."
+
+    # Append the options vfio-pci line to /etc/default/grub using sed
+    # The -i option is used to edit the file in place and the -e option is used to specify the sed script
+        GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+        GRUB+=" vfio-pci.ids=$pci_id\""
+        sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
+    ;;
+  No|no|N|n)
+    # If the user does not want to insert the PCI ID into GRUB, exit the script
+    echo "Not inserting PCI ID into GRUB, have a nice day."
+    exit 0
+    ;;
+  *)
+    # If the user enters an invalid choice, display an error message and exit the script
+    echo "Invalid choice. Exiting script."
+    exit 1
+    ;;
+esac
+
+# Update the GRUB configuration file
+grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
+
+# Check if the vfio-pci device was created successfully
+# if dmesg | grep -q "IOMMU"; then
+  # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
+  echo "vfio-pci device created successfully. The modified GRUB configuration file is saved as /etc/default/grub.bak"
+  read -p "Would you like to reboot now? (Y/N) " reboot
+
+  case $reboot in
+    Y|y|Yes|yes)
+      # If the user wants to reboot, reboot the system
+      reboot
+      ;;
+    No|no|N|n)
+      # If the user does not want to reboot, exit the script
+      echo "Reboot not performed, have a nice day."
+      exit 0
+      ;;
+    *)
+      # If the user enters an invalid choice, display an error message and exit the script
+      echo "Invalid choice. Exiting script."
+      exit 1
+      ;;
+  esac
