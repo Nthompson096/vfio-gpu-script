@@ -262,12 +262,15 @@ case $grubpci in
     ;;
   No|no|N|n)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
+    echo "the reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/"
+    echo "be sure to rboot if you made changes to your grub."
     echo "Not inserting PCI ID into GRUB, have a nice day."
     exit 0
     ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
-    echo "Invalid choice. Exiting script."
+    echo "the reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/"
+    echo "be sure to rboot if you made changes to your grub."
     exit 1
     ;;
 esac
