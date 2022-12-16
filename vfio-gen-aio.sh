@@ -81,9 +81,6 @@ case $gblacklist in
     ;;
 esac
 
-
-#!/bin/bash
-
 # Use lspci to list the VGA devices
 lspci -nn | grep "VGA" && lspci -nn | grep "Audio"
 
