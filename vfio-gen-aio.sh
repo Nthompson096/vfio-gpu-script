@@ -278,8 +278,9 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
 # Check if the vfio-pci device was created successfully
 # if dmesg | grep -q "IOMMU"; then
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
-  echo "vfio-pci device created successfully. The modified GRUB configuration file is saved as /etc/default/grub.bak"
-  read -p "Would you like to reboot now? (Y/N) " reboot
+   printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
+   printf "\npress Y to reboot now and n to reboot later."
+   read -p "Would you like to reboot now? (Y/N) " reboot
 
   case $reboot in
     Y|y|Yes|yes)
@@ -293,7 +294,7 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
       ;;
     *)
       # If the user enters an invalid choice, display an error message and exit the script
-      echo "Invalid choice. Exiting script."
+      echo "Reboot not performed, have a nice day."
       exit 1
       ;;
   esac
