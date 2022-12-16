@@ -180,8 +180,8 @@ sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
 sleep 5s
 clear
-printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
-printf "\npress Y to reboot now and n to reboot later."
+  printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
+   printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
 if [ $REBOOT = "y" ]
@@ -212,8 +212,8 @@ sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&   
 sleep 5s
 clear            
-printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
-printf "\npress Y to reboot now and n to reboot later."
+  printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
+   printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
 if [ $REBOOT = "Y" ]
@@ -278,7 +278,7 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
 # Check if the vfio-pci device was created successfully
 # if dmesg | grep -q "IOMMU"; then
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
-   printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak"
+   printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
    printf "\npress Y to reboot now and n to reboot later."
    read -p "Would you like to reboot now? (Y/N) " reboot
 
