@@ -108,7 +108,7 @@ case $yn in
     # If the user does not want to insert the PCI ID into GRUB, exit the script
           clear
       sleep 1s
-    echo "Not inserting PCI ID into vfio config, have a nice day."
+    echo "Not inserting PCI ID into vfio config."
       sleep 1s
       clear
     break
@@ -118,7 +118,7 @@ case $yn in
     # If the user enters an invalid choice, display an error message and exit the script
           clear
       sleep 1s
-    echo "Not inserting PCI ID into vfio config, have a nice day."
+    echo "Not inserting PCI ID into vfio config."
       sleep 1s
       clear
     break
@@ -357,14 +357,14 @@ case $grubpci in
     ;;
   No|no|N|n)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
-    printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/"
+    printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
     echo "be sure to reboot if you made changes to your grub."
     echo "Not inserting PCI ID into GRUB, have a nice day."
     exit 0
     ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
-    printf "the reverted grub file is saved as /etc/default/grub.bak and the blacklists are in /etc/modprobe/"
+    printf "the reverted grub file is saved as /etc/default/grub.bak and the blacklists are in /etc/modprobe/\n"
     echo "be sure to rboot if you made changes to your grub."
     exit 1
     ;;
