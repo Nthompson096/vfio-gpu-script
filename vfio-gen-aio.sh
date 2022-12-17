@@ -276,7 +276,7 @@ echo "Not rebooting"
 #Ask the user if they want to breakup GPU, inform them it will require the ACS patch.
 
 echo "feel free to read: https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)"
-read -p "Would you like to create ASC gpu breakups in grub? required ASC patch. (y/n) " breakupGPU
+read -p "Would you like to create ASC gpu breakups in grub? required you'd install the ASC patch. (y/n) " breakupGPU
 
 case $breakupGPU in
   Y|y|Yes|yes)
