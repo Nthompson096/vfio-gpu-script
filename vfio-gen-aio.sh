@@ -96,19 +96,31 @@ case $yn in
 
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
+                  clear
+      sleep 1s
             echo "Creating vfio-pci device for $pci_id..."
+      sleep 1s
+      clear
             echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
             break
             ;;
   No|N|n|no)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
+          clear
+      sleep 1s
     echo "Not inserting PCI ID into vfio config, have a nice day."
+      sleep 1s
+      clear
     break
     ;;
 
   *)
     # If the user enters an invalid choice, display an error message and exit the script
+          clear
+      sleep 1s
     echo "Not inserting PCI ID into vfio config, have a nice day."
+      sleep 1s
+      clear
     break
     ;;
 esac
@@ -118,17 +130,25 @@ read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep
 
 case $softdep in
   Y|y|Yes|yes)
-    # Blacklist AMD GPUs
+    # fio-pci for nvidia
   echo -n "softdep pre: vfio-pci for nvidia" >> /etc/modprobe.d/vfio.conf
     ;;
   No|no|N|n)
     # Invalid choice
-    echo "Not creating a softdep."
+      clear
+      sleep 1s
+      echo "Not creating a softdep."
+      sleep 1s
+      clear
     break
     ;;
    *)
     # Invalid choice
-    echo "Not creating a softdep."
+      clear
+      sleep 1s
+      echo "Not creating a softdep."
+      sleep 1s
+      clear
     break
     ;;
 esac
@@ -144,14 +164,19 @@ if [[ $confirm == "Y" || $confirm == "y" ]]; then
   elif [ -f /etc/redhat-release ]; then
     dracut -f
   fi
-
+clear
+sleep 1s
   echo "Initramfs/mkinitcpio updated successfully"
+sleep 1s
+  clear
 else
   echo "Initramfs/mkinitcpio update cancelled"
+  sleep 1s
+  clear
 fi
     
 
-
+### Intel CPU
 read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
 case $cpu in
   I|i|Intel|intel|INTEL)
@@ -173,9 +198,7 @@ GRUB+=" intel_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
-sleep 5s
-clear
-  printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
+  printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
    printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
@@ -184,11 +207,18 @@ then
   reboot
   exit
 else
+clear
+sleep 1s
 echo "Not rebooting"
+sleep 1s
+clear
 fi
                                                                                                                                                                                                                                        
 break
     ;;
+
+#AMD CPU's
+
   A|a|amd|Amd|AMD)
 
 # Check if a copy of the grub configuration file already exists
@@ -209,9 +239,7 @@ GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&   
-sleep 5s
-clear            
-  printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
+  printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
    printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
@@ -220,15 +248,78 @@ then
   reboot
   exit
 else
+clear
+sleep 1s
 echo "Not rebooting"
+    sleep 1s
+    clear
 fi
 
 break
     ;;
   N|n|No|no)
-   clear
+clear
+sleep 1s
+echo echo "Not configuring GRUB"
+sleep 1s
+clear
+   break;;
+   *) 
+clear
+sleep 1s
+echo "Not rebooting"
+    sleep 1s
+    clear
     break;;
    esac
+
+#Ask the user if they want to breakup GPU, inform them it will require the ACS patch.
+
+echo "feel free to read: https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)"
+read -p "Would you like to create ASC gpu breakups in grub? required ASC patch. (y/n) " breakupGPU
+
+case $breakupGPU in
+  Y|y|Yes|yes)
+      if ls /etc/default/ | grep -q "grub.bak"; then
+      # If the file exists, skip it
+      echo "A backup of the grub configuration file already exists. Skipping."
+    else
+      # If the file does not exist, create a backup
+      cp /etc/default/grub /etc/default/grub.bak
+      echo "Backed up the grub configuration file to /etc/default/grub.bak"
+    fi
+sleep 1s
+clear
+
+    # Append the options vfio-pci line to /etc/default/grub using sed
+    # The -i option is used to edit the file in place and the -e option is used to specify the sed script
+      GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+      #adds amd_iommu=on and iommu=pt to the grub config
+      GRUB+=" pcie_acs_override=downstream,multifunction\""
+      sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
+
+      grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
+      break
+      ;;
+     N|n|No|no)
+    # If the user enters an invalid choice, display an error message and exit the script
+    clear
+    sleep 1s
+    echo "Not creating GPU breakups"
+    sleep 1s
+    clear
+    break
+    ;;
+  *)
+    # If the user enters an invalid choice, display an error message and exit the script
+    clear
+    sleep 1s
+    echo "Not creating GPU breakups"
+    sleep 1s
+    clear
+    break
+    ;;
+esac
 
 # Ask the user if they want to input the PCI ID into GRUB
 read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
@@ -243,7 +334,8 @@ case $grubpci in
       cp /etc/default/grub /etc/default/grub.bak
       echo "Backed up the grub configuration file to /etc/default/grub.bak"
     fi
-    sleep 5s
+    clear
+    sleep 2s
     lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
     read -p "Enter the PCI ID of your NVIDIA or AMD graphics card (format: xxxx:xxxx,xxxx:xxxx): " pci_id
 
@@ -265,14 +357,14 @@ case $grubpci in
     ;;
   No|no|N|n)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
-    echo "the reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/"
-    echo "be sure to rboot if you made changes to your grub."
+    printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/"
+    echo "be sure to reboot if you made changes to your grub."
     echo "Not inserting PCI ID into GRUB, have a nice day."
     exit 0
     ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
-    echo "the reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/"
+    printf "the reverted grub file is saved as /etc/default/grub.bak and the blacklists are in /etc/modprobe/"
     echo "be sure to rboot if you made changes to your grub."
     exit 1
     ;;
@@ -284,8 +376,8 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
 # Check if the vfio-pci device was created successfully
 # if dmesg | grep -q "IOMMU"; then
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
-   printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
-   printf "\npress Y to reboot now and n to reboot later."
+   printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+   printf "\npress Y to reboot now and n to reboot later.\n"
    read -p "Would you like to reboot now? (Y/N) " reboot
 
   case $reboot in
