@@ -242,7 +242,7 @@ sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&   
   printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
   printf "be sure to reboot if you have blacklisted any GPU's\n"
-   printf "press Y to reboot now and n to reboot later."
+   printf "press Y to reboot now and n to reboot later (if you want other options)."
 read REBOOT
 
 if [ "${REBOOT}" = "Y" ] || [ "${REBOOT}" = "y" ]
@@ -349,7 +349,7 @@ case $grubpci in
     fi
 
     # Use the entered PCI ID to create a vfio-pci device for the graphics card
-    echo "Creating vfio-pci device for $pci_id..."
+    echo "Creating vfio-pci device for $pci_id for grub..."
 
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
