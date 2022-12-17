@@ -365,7 +365,7 @@ case $grubpci in
   *)
     # If the user enters an invalid choice, display an error message and exit the script
     printf "the reverted grub file is saved as /etc/default/grub.bak and the blacklists are in /etc/modprobe/\n"
-    echo "be sure to rboot if you made changes to your grub."
+    echo "be sure to reboot if you made changes to your grub."
     exit 1
     ;;
 esac
