@@ -52,7 +52,7 @@ else
 fi
 
 # Prompt the user to choose which GPU to blacklist
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/enter for no] " gblacklist
+read -p "Do you want to blacklist AMD or NVIDIA GPUs? You'll need to reboot... [A/N/enter for no] " gblacklist
 
 case $gblacklist in
   A|a)
@@ -198,8 +198,9 @@ GRUB+=" intel_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
-  printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
-   printf "\npress Y to reboot now and n to reboot later."
+ printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+  printf "be sure to reboot if you have blacklisted any GPU's\n"
+   printf "press Y to reboot now and n to reboot later."
 read REBOOT
 
 if [ "${REBOOT}" = "Y" ] || [ "${REBOOT}" = "y" ]
@@ -239,8 +240,9 @@ GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&   
-  printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\n and the blacklists are in /etc/modprobe/\n"
-   printf "\npress Y to reboot now and n to reboot later."
+  printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+  printf "be sure to reboot if you have blacklisted any GPU's\n"
+   printf "press Y to reboot now and n to reboot later."
 read REBOOT
 
 if [ "${REBOOT}" = "Y" ] || [ "${REBOOT}" = "y" ]
@@ -267,7 +269,7 @@ clear
    *) 
 clear
 sleep 1s
-echo "Not rebooting"
+echo "Not configuring GRUB"
     sleep 1s
     clear
     break;;
@@ -358,14 +360,17 @@ case $grubpci in
   No|no|N|n)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
     printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
-    echo "be sure to reboot if you made changes to your grub."
+    printf "be sure to reboot if you have blacklisted any GPU's\n"
+    printf "or if you made changes to your grub.\n"
     echo "Not inserting PCI ID into GRUB, have a nice day."
     exit 0
     ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
-    printf "the reverted grub file is saved as /etc/default/grub.bak and the blacklists are in /etc/modprobe/\n"
-    echo "be sure to reboot if you made changes to your grub."
+    printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+    printf "be sure to reboot if you have blacklisted any GPU's\n"
+    printf "or if you made changes to your grub.\n"
+    echo "Not inserting PCI ID into GRUB, have a nice day."
     exit 1
     ;;
 esac
@@ -376,8 +381,9 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
 # Check if the vfio-pci device was created successfully
 # if dmesg | grep -q "IOMMU"; then
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
-   printf "\nGrub bootloader has been modified successfully, reboot time! \nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
-   printf "\npress Y to reboot now and n to reboot later.\n"
+ printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+  printf "be sure to reboot if you have blacklisted any GPU's\n"
+   printf "press Y to reboot now and n to reboot later."
    read -p "Would you like to reboot now? (Y/N) " reboot
 
   case $reboot in
@@ -387,6 +393,9 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
       ;;
     No|no|N|n)
       # If the user does not want to reboot, exit the script
+      printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+      printf "be sure to reboot if you have blacklisted any GPU's\n"
+      printf "press Y to reboot now and n to reboot later.\n"
       echo "Reboot not performed, have a nice day."
       exit 0
       ;;
