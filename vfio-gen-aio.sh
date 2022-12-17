@@ -184,7 +184,7 @@ then
   reboot
   exit
 else
-echo "Not adding iommu for Intel"
+echo "Not rebooting"
 fi
                                                                                                                                                                                                                                        
 break
@@ -220,7 +220,7 @@ then
   reboot
   exit
 else
-echo "Not adding iommu for AMD"
+echo "Not rebooting"
 fi
 
 break
