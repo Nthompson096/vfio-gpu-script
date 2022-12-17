@@ -8,7 +8,7 @@ fi
 
 if [ -f /etc/default/grub.bak ]; then
   read -p "Do you want to revert grub? [y/n] " answer
-  if [ "$answer" == "y" ]; then
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     mv /etc/default/grub.bak /etc/default/grub &&
    grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null   
     echo "grub reverted"
@@ -17,7 +17,7 @@ fi
 
 if [ -f /etc/modprobe.d/blacklist-nvidia.conf ]; then
   read -p "Do you want to delete the NVIDIA blacklist? [y/n] " answer
-  if [ "$answer" == "y" ]; then
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA blacklist deleted."
   fi
@@ -25,7 +25,7 @@ fi
 
 if [ -f /etc/modprobe.d/blacklist-amd.conf ]; then
   read -p "Do you want to delete the AMD blacklist? [y/n] " answer
-  if [ "$answer" == "y" ]; then
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/blacklist-amd.conf
     echo "AMD blacklist deleted."
   fi
@@ -33,7 +33,7 @@ fi
 
 if [ -f /etc/modprobe.d/vfio.conf ]; then
   read -p "Do you want to delete the VFIO file? [y/n] " answer
-  if [ "$answer" == "y" ]; then
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/vfio.conf
     echo "VFIO file deleted."
   fi
@@ -42,7 +42,7 @@ fi
 
 read -p "Do you want to continue? [y/n] " answer
 
-if [ "$answer" = "y" ]; then
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   # code to execute if the answer is "yes"
   echo "Continuing script execution..."
 else
@@ -52,7 +52,7 @@ else
 fi
 
 # Prompt the user to choose which GPU to blacklist
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/No] " gblacklist
+read -p "Do you want to blacklist AMD or NVIDIA GPUs? [A/N/enter for no] " gblacklist
 
 case $gblacklist in
   A|a)
@@ -74,11 +74,6 @@ case $gblacklist in
     echo "blacklist nvidia_drm" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA GPUs have been blacklisted"
     ;;
-  No|no)
-    # Invalid choice
-    echo "Not creating a blacklist."
-    break
-    ;;
 *)
     # Invalid choice
     echo "Not creating a blacklist."
@@ -86,10 +81,10 @@ case $gblacklist in
     ;;
 esac
 
-read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (Y/N) " yn
+read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (y/n) " yn
 
 case $yn in
-   Y) lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
+   Y|y|Yes|yes) lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
     read -p "Enter the PCI ID of your NVIDIA or AMD graphics card (format: xxxx:xxxx,xxxx:xxxx): " pci_id
 
     # Check if the PCI ID entered by the user is not empty
@@ -105,7 +100,7 @@ case $yn in
             echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
             break
             ;;
-  N)
+  No|N|n|no)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
     echo "Not inserting PCI ID into vfio config, have a nice day."
     break
@@ -159,7 +154,7 @@ fi
 
 read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
 case $cpu in
-  I|i)
+  I|i|Intel|intel|INTEL)
 echo "This will configure your grub config for virtualization for Intel."
 
 # Check if a copy of the grub configuration file already exists
@@ -184,13 +179,17 @@ clear
    printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
-if [ $REBOOT = "y" ]
-        then                                                                                                                                                                                                                                  
-                reboot                                                                                                                                                                                                                        
-fi                                                                                                                                                                                                                                            
+if [ "${REBOOT}" = "Y" ] || [ "${REBOOT}" = "y" ]
+then
+  reboot
+  exit
+else
+echo "Not adding iommu for Intel"
+fi
+                                                                                                                                                                                                                                       
 break
     ;;
-  A|a)
+  A|a|amd|Amd|AMD)
 
 # Check if a copy of the grub configuration file already exists
     if ls /etc/default/ | grep -q "grub.bak"; then
@@ -216,10 +215,14 @@ clear
    printf "\npress Y to reboot now and n to reboot later."
 read REBOOT
 
-if [ $REBOOT = "Y" ]
-        then
-                reboot
+if [ "${REBOOT}" = "Y" ] || [ "${REBOOT}" = "y" ]
+then
+  reboot
+  exit
+else
+echo "Not adding iommu for AMD"
 fi
+
 break
     ;;
   N|n|No|no)
@@ -228,7 +231,7 @@ break
    esac
 
 # Ask the user if they want to input the PCI ID into GRUB
-read -p "Would you like to insert your PCI ID into GRUB? (Y/N) " grubpci
+read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
 
 case $grubpci in
   Y|y|Yes|yes)
