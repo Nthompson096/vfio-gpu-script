@@ -21,5 +21,5 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 * Will also ask if it wants you to create a vfio file (if you have the vfio-linux kernel)
 * Will ask you to input the values into your grub (pci.ids)
 * Will ask you if you'd want to generate AMD/Intel Iommu configs
-* Will ask you if you'd want to create GPU breakups (good for when groups are not grouped properly)
+* Will ask you if you'd want to create GPU breakups with an ACS override patch (good for when groups are not grouped properly)
 * Will ask you if you'd want to remove the blacklist/vfio on start, also will ask you if you want to revert grub.
