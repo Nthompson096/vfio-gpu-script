@@ -29,8 +29,8 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 This should help; keep in mind that it will suspend your host so you'll have to just clock a keyboard button; you'll need to run this script as a super user (sudo).
 
     #!/bin/bash
-    echo 1 > /sys/bus/pci/devices/0000:09:00.0/remove
-    echo 1 > /sys/bus/pci/devices/0000:09:00.1/remove
+    echo 1 > /sys/bus/pci/devices/0000:00:00.0/remove
+    echo 1 > /sys/bus/pci/devices/0000:00:00.1/remove
     echo "Suspending..."
     rtcwake -m no -s 4
     systemctl suspend
@@ -38,3 +38,5 @@ This should help; keep in mind that it will suspend your host so you'll have to 
     echo 1 > /sys/bus/pci/rescan    
     echo "Reset done"
 
+
+you can view your GFX card with ``lspci`` and it should give you the PCI-E numbers such as ``09:00.0`` and ``09:00.1`` for an example.
