@@ -23,3 +23,18 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 * Will ask you if you'd want to generate AMD/Intel Iommu configs
 * Will ask you if you'd want to create GPU breakups with an ACS override patch (good for when groups are not grouped properly)
 * Will ask you if you'd want to remove the blacklist/vfio on start, also will ask you if you want to revert grub.
+
+## I have issues with reseting a GPU from AMD
+
+This should help; keep in mind that it will suspend your host so you'll have to just clock a keyboard button.
+
+    #!/bin/bash
+    echo 1 > /sys/bus/pci/devices/0000:09:00.0/remove
+    echo 1 > /sys/bus/pci/devices/0000:09:00.1/remove
+    echo "Suspending..."
+    rtcwake -m no -s 4
+    systemctl suspend
+    sleep 5s
+    echo 1 > /sys/bus/pci/rescan    
+    echo "Reset done"
+
