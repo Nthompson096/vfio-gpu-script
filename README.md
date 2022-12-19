@@ -26,7 +26,7 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 
 ## I have issues with reseting a GPU from AMD
 
-This should help; keep in mind that it will suspend your host so you'll have to just clock a keyboard button.
+This should help; keep in mind that it will suspend your host so you'll have to just clock a keyboard button; you'll need to run this script as a super user (sudo).
 
     #!/bin/bash
     echo 1 > /sys/bus/pci/devices/0000:09:00.0/remove
