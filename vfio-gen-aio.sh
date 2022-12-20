@@ -84,7 +84,6 @@ case $gblacklist in
     echo "Not creating a blacklist."
     sleep 1s
     clear
-    break
     ;;
 esac
 
@@ -109,7 +108,6 @@ case $yn in
       sleep 1s
       clear
             echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
-            break
             ;;
   No|N|n|no)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
@@ -128,7 +126,6 @@ case $yn in
     echo "Not inserting PCI ID into vfio config."
       sleep 1s
       clear
-    break
     ;;
 esac
 
@@ -156,7 +153,6 @@ case $softdep in
       echo "Not creating a softdep."
       sleep 1s
       clear
-    break
     ;;
 esac
 
@@ -221,8 +217,6 @@ echo "Not rebooting"
 sleep 1s
 clear
 fi
-                                                                                                                                                                                                                                       
-break
     ;;
 
 #AMD CPU's
@@ -263,8 +257,6 @@ echo "Not rebooting"
     sleep 1s
     clear
 fi
-
-break
     ;;
   N|n|No|no)
 clear
@@ -279,7 +271,6 @@ sleep 1s
 echo "Not configuring GRUB"
     sleep 1s
     clear
-    break;;
    esac
 
 #Ask the user if they want to breakup GPU, inform them it will require the ACS patch.
@@ -317,7 +308,6 @@ clear
     echo "Not creating GPU breakups"
     sleep 1s
     clear
-    break
     ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
@@ -326,7 +316,6 @@ clear
     echo "Not creating GPU breakups"
     sleep 1s
     clear
-    break
     ;;
 esac
 
