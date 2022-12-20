@@ -367,7 +367,7 @@ case $grubpci in
     printf "be sure to reboot if you have blacklisted any GPU's\n"
     printf "or if you made changes to your grub.\n"
     echo "Not inserting PCI ID into GRUB, have a nice day."
-    exit 1
+    exit 0
     ;;
 esac
 
@@ -398,6 +398,6 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
     *)
       # If the user enters an invalid choice, display an error message and exit the script
       echo "Reboot not performed, have a nice day."
-      exit 1
+      exit 0
       ;;
   esac
