@@ -51,6 +51,8 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 else
   # code to execute if the answer is "no"
   echo "Exiting script."
+  sleep 1s
+  clear
   exit
 fi
 
