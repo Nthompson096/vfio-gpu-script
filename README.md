@@ -45,11 +45,11 @@ you can view your GFX card with ``lspci`` and it should give you the PCI-E numbe
 
 *  *inital startup*
 
-![](https://im4.ezgif.com/tmp/ezgif-4-928d701bf5.gif)
+![](https://im4.ezgif.com/tmp/ezgif-4-cc07664785.gif)
 
 *  *minitcipo update and softdep*
 
-![](https://im4.ezgif.com/tmp/ezgif-4-e5123371d8.gif)
+![](https://im4.ezgif.com/tmp/ezgif-4-57c2229b3e.gif)
 
 *  *CPU and other options*
 
