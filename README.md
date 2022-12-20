@@ -40,3 +40,17 @@ This should help; keep in mind that it will suspend your host so you'll have to 
 
 
 you can view your GFX card with ``lspci`` and it should give you the PCI-E numbers such as ``09:00.0`` and ``09:00.1`` for an example.
+
+## GIF Examples
+
+*  *inital startup*
+
+![](https://im4.ezgif.com/tmp/ezgif-4-928d701bf5.gif)
+
+*  *minitcipo update and softdep*
+
+![](https://im4.ezgif.com/tmp/ezgif-4-e5123371d8.gif)
+
+*  *CPU and other options*
+
+![](https://im4.ezgif.com/tmp/ezgif-4-2f1a5ff7a3.gif)
