@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Check if the script is being run as root
 if [[ $EUID -ne 0 ]]; then
@@ -39,12 +39,15 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   fi
 fi
 
+clear
 
 read -p "Do you want to continue? [y/n] " answer
 
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   # code to execute if the answer is "yes"
   echo "Continuing script execution..."
+  sleep 1s
+  clear
 else
   # code to execute if the answer is "no"
   echo "Exiting script."
@@ -77,6 +80,8 @@ case $gblacklist in
 *)
     # Invalid choice
     echo "Not creating a blacklist."
+    sleep 1s
+    clear
     break
     ;;
 esac
