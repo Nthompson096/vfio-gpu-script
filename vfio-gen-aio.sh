@@ -130,12 +130,18 @@ case $yn in
 esac
 
 
-read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep
+read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep_nvidia
 
-case $softdep in
+case $softdep_nvidia in
   Y|y|Yes|yes)
     # fio-pci for nvidia
-  echo -n "softdep pre: vfio-pci for nvidia" >> /etc/modprobe.d/vfio.conf
+  printf "softdep nouveau pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
+  printf "\nsoftdep nvidia_drm pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
+  printf "\nsoftdep nvidia pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
+  printf "\nsoftdep snd_hda_intel pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
+  printf "\nsoftdep nvidia* pre: vfio-pci\n" >> /etc/modprobe.d/vfio.conf
+
+
     ;;
   No|no|N|n)
     # Invalid choice
