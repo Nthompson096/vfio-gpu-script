@@ -6,6 +6,9 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# This will revert GNU/grub to what it was before with a backup
+# Copy of it, will also check to see if it exists.
+
 if [ -f /etc/default/grub.bak ]; then
   read -p "Do you want to revert grub? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
@@ -14,6 +17,9 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     echo "grub reverted"
   fi
 fi
+
+# Will check to see if the blacklist for either graphics card are
+# In modprobe, will ask the user if it wants to remove it
 
 if [ -f /etc/modprobe.d/blacklist-nvidia.conf ]; then
   read -p "Do you want to delete the NVIDIA blacklist? [y/n] " answer
@@ -31,6 +37,9 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   fi
 fi
 
+# vfio file for when the user had inputted it's GPU IDS, will ask if
+# if it wants it deleted
+
 if [ -f /etc/modprobe.d/vfio.conf ]; then
   read -p "Do you want to delete the VFIO file? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
@@ -39,7 +48,11 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   fi
 fi
 
+# clears the screen on the terminal if that wasn't obvious
+
 clear
+
+# Will ask the user if it wants to continue the execution of the bash script
 
 read -p "Do you want to continue? [y/n] " answer
 
@@ -80,12 +93,15 @@ case $gblacklist in
     echo "NVIDIA GPUs have been blacklisted"
     ;;
 *)
-    # Invalid choice
+    # if no value, will skip the creation of a blacklist for either card.
     echo "Not creating a blacklist."
     sleep 1s
     clear
     ;;
 esac
+
+# Will ask the user if it wants create a VFIO file, will exit the script if no input if yes
+# Thinking about creating a loop of some or moving the IF command somehow.
 
 read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (y/n) " yn
 
@@ -93,7 +109,7 @@ case $yn in
    Y|y|Yes|yes) lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
     read -p "Enter the PCI ID of your NVIDIA or AMD graphics card (format: xxxx:xxxx,xxxx:xxxx): " pci_id
 
-    # Check if the PCI ID entered by the user is not empty
+    # Check if the PCI ID entered by the user is not empty, will exit if it is.
     if [ -z "$pci_id" ]; then
       # If the PCI ID is empty, display an error message and exit the script
       echo "Error: PCI ID cannot be empty."
@@ -120,7 +136,7 @@ case $yn in
     ;;
 
   *)
-    # If the user enters an invalid choice, display an error message and exit the script
+    # If the user enters an invalid choice, will skip the creation of a VFIO file.
           clear
       sleep 1s
     echo "Not inserting PCI ID into vfio config."
@@ -129,6 +145,7 @@ case $yn in
     ;;
 esac
 
+# NVIDIA softdep option for VFIO-pci; should load the driver ahead of time...
 
 read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep_nvidia
 
@@ -144,7 +161,7 @@ case $softdep_nvidia in
   sleep 1s
    ;;
   No|no|N|n)
-    # Invalid choice
+ # Invalid choice, skipping
       clear
       sleep 1s
       echo "Not creating a softdep."
@@ -153,7 +170,39 @@ case $softdep_nvidia in
     break
     ;;
    *)
-    # Invalid choice
+ # Invalid choice, skipping
+      clear
+      sleep 1s
+      echo "Not creating a softdep."
+      sleep 1s
+      clear
+    ;;
+esac
+
+# AMD Softdep vfio configs
+
+read -p "Do you want to create pre: vfio-pci for AMD GPU's? [Y/No] " softdep_AMD
+
+case $softdep_AMD in
+  Y|y|Yes|yes)
+    # fio-pci for AMD
+  printf "softdep radeon pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
+  printf "\nsoftdep amdgpu pre: vfio-pci\n" >> /etc/modprobe.d/vfio.conf
+  printf "\nsoftdep snd_hda_intel pre: vfio-pci\n" >> /etc/modprobe.d/vfio.conf
+  echo "created softdep for AMD-cards"
+  sleep 1s
+   ;;
+  No|no|N|n)
+    # Invalid choice, skipping
+      clear
+      sleep 1s
+      echo "Not creating a softdep."
+      sleep 1s
+      clear
+    break
+    ;;
+   *)
+ # Invalid choice, skipping
       clear
       sleep 1s
       echo "Not creating a softdep."
