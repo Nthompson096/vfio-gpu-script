@@ -140,9 +140,9 @@ case $softdep_nvidia in
   printf "\nsoftdep nvidia pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
   printf "\nsoftdep snd_hda_intel pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
   printf "\nsoftdep nvidia* pre: vfio-pci\n" >> /etc/modprobe.d/vfio.conf
-
-
-    ;;
+  echo "created softdep for nvidia-cards"
+  sleep 1s
+   ;;
   No|no|N|n)
     # Invalid choice
       clear
