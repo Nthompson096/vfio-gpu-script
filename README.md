@@ -47,8 +47,6 @@ you can view your GFX card with ``lspci`` and it should give you the PCI-E numbe
 
 ![](https://i.imgur.com/CPf0zYs.gif)
 
-![]()
-
 *  *CPU and other options*
 
 ![](https://i.imgur.com/TuVIzoJ.gif)
