@@ -28,7 +28,7 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 
 This should help; keep in mind that it will suspend your host so you'll have to just click a keyboard button; you'll need to run this script as a super user (sudo).
 
-    #!/bin/sh
+    #!/bin/bash
     echo 1 > /sys/bus/pci/devices/0000:00:00.0/remove
     echo 1 > /sys/bus/pci/devices/0000:00:00.1/remove
     echo "Suspending..."
