@@ -298,8 +298,7 @@ clear
       GRUB+=" pcie_acs_override=downstream,multifunction\""
       sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
-      grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
-      break
+      grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
       ;;
      N|n|No|no)
     # If the user enters an invalid choice, display an error message and exit the script
