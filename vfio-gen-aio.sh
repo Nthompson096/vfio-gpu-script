@@ -198,7 +198,6 @@ case $softdep_AMD in
       echo "Not creating a softdep."
       sleep 1s
       clear
-    break
     ;;
    *)
  # Invalid choice, skipping
