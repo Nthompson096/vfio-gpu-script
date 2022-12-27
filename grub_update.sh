@@ -40,45 +40,45 @@ if [ -f /etc/default/grub.bak ]; then
       "Red Hat Enterprise Linux" | "CentOS")
         # Revert the GRUB configuration for Red Hat or CentOS
         grub2-mkconfig -o "$grub_cfg" 2> /dev/null
-        echo "grub saved for Red Hat or CentOS"
+        echo "grub updated for Red Hat or CentOS"
         ;;
       "Arch Linux")
         # Revert the GRUB configuration for Red Hat or CentOS
 
         grub-mkconfig -o "$grub_cfg" 2> /dev/null
-        echo "grub saved for Arch"
+        echo "grub updated for Arch"
         ;;
       "Ubuntu")
         # Revert the GRUB configuration for Ubuntu
         update-grub 2> /dev/null
-        echo "grub saved for Ubuntu"
+        echo "grub updated for Ubuntu"
         ;;
       "Debian")
         # Revert the GRUB configuration for Debian
         update-grub 2> /dev/null
-        echo "grub saved for Debian"
+        echo "grub updated for Debian"
         ;;
       "Fedora Linux")
         # Revert the GRUB configuration for Fedora
         grub2-mkconfig -o "$grub_cfg" 2> /dev/null
-        echo "grub saved for Fedora"
+        echo "grub updated for Fedora"
         ;;
       "openSUSE")
         # Revert the GRUB configuration for openSUSE
         grub2-mkconfig -o "$grub_cfg" 2> /dev/null
-        echo "grub saved for openSUSE"
+        echo "grub updated for openSUSE"
         ;;
         # "Custom_linux_distro")
         # Revert the GRUB configuration for Debian
         # mv /etc/default/grub.bak /etc/default/grub &&
         # update-grub 2> /dev/null
-        # echo "grub saved for Debian"
+        # echo "grub updated for Debian"
         # ;;
         # "Custom_linux_distro")
         # # Revert the GRUB configuration for Red Hat or CentOS
         # mv /etc/default/grub.bak /etc/default/grub &&
         # grub-mkconfig -o "$grub_cfg" 2> /dev/null
-        # echo "grub saved for Red Hat or CentOS"
+        # echo "grub updated for Red Hat or CentOS"
         # ;;
       *)
         echo "Unable to revert grub for unknown Linux distribution: $os_name"
