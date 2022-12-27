@@ -23,7 +23,7 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 * Will ask you if you'd want to generate AMD/Intel Iommu configs
 * Will ask you if you'd want to create GPU breakups with an ACS override patch (good for when groups are not grouped properly)
 * Will ask you if you'd want to remove the blacklist/vfio on start, also will ask you if you want to revert grub.
-* Will pull in other scripts for grub updates (or any bootloader you use) with grub-update and grub-backup shell scripts.
+* Will pull in other scripts for grub updates (or any bootloader you use) with grub-update and grub-backup shell scripts, will ask you to revert changes within grub revert; all customizable or at least easily customizable than compared to earlier.
 
 ## I have issues with resetting a GPU from AMD
 
