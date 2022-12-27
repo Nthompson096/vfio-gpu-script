@@ -237,10 +237,13 @@ if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
 fi
 
-GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
-#adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" intel_iommu=on iommu=pt video=efifb:off\""
+GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
+#adds intel_iommu=on and iommu=pt to the grub config
+GRUB+=" intel_iommu=on iommu=pt video=efifb:off"
+# Add the equals sign and double quotes
+GRUB="GRUB_CMDLINE_LINUX=\"$GRUB\""
 sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
+
 sh ./grub_update.sh
 
  printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
@@ -275,9 +278,12 @@ if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
 fi
 
-GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
+
+GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
+GRUB+=" amd_iommu=on iommu=pt video=efifb:off"
+# Add the equals sign and double quotes
+GRUB="GRUB_CMDLINE_LINUX=\"$GRUB\""
 sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
 
   printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
@@ -330,6 +336,10 @@ case $breakupGPU in
 sleep 1s
 clear
 
+if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # If the line is commented, remove the comment
+  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+fi
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
 
@@ -368,6 +378,10 @@ read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
 case $grubpci in
   Y|y|Yes|yes)
     sh ./grub_backup.sh
+    if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # If the line is commented, remove the comment
+    sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+    fi
     clear
     sleep 2s
     lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
