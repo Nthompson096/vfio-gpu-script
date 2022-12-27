@@ -206,11 +206,11 @@ read -p "Enter Y to update, or N to cancel: " confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
   if [ -f /etc/debian_version ]; then
-    update-initramfs -u 2> /dev/null
+    update-initramfs -u
   elif [ -f /etc/arch-release ]; then
-    mkinitcpio -P 2> /dev/null
+    mkinitcpio -P 
   elif [ -f /etc/redhat-release ]; then
-    dracut -f 2> /dev/null
+    dracut -f 
   fi
 clear
 sleep 1s
@@ -223,6 +223,8 @@ else
   clear
 fi
     
+sh ./grub_backup.sh
+
 if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
   # If the line is commented, remove the comment
   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
@@ -234,9 +236,6 @@ read -p "Do you want the script to configure grub for you for (I)ntel or (A)md o
 case $cpu in
   I|i|Intel|intel|INTEL)
 echo "This will configure your grub config for virtualization for Intel."
-
-sh ./grub_backup.sh
-
 GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
 #adds intel_iommu=on and iommu=pt to the grub config
 GRUB+=" intel_iommu=on iommu=pt video=efifb:off"
@@ -269,7 +268,7 @@ fi
   A|a|amd|Amd|AMD)
 
 
-sh ./grub_backup.sh
+# sh ./grub_backup.sh
 
     echo "This will configure your grub config for virtualization for AMD."
 
@@ -320,23 +319,9 @@ read -p "Would you like to create ASC gpu breakups in grub? required you'd insta
 
 case $breakupGPU in
   Y|y|Yes|yes)
-      if ls /etc/default/ | grep -q "grub.bak"; then
-      # If the file exists, skip it
-      echo "A backup of the grub configuration file already exists. Skipping."
-    else
-      # If the file does not exist, create a backup
-      cp /etc/default/grub /etc/default/grub.bak
-      echo "Backed up the grub configuration file to /etc/default/grub.bak"
-    fi
 sleep 1s
 clear
 
-# if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
-#   # If the line is commented, remove the comment
-#   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
-# else
-#   break
-# fi
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
 
@@ -348,8 +333,6 @@ clear
 
 sh ./grub_update.sh
 
-# grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
-# grub2-mkconfig -o /boot/grub2/grub2.cfg 2> /dev/null
       ;;
      N|n|No|no)
     # If the user enters an invalid choice, display an error message and exit the script
@@ -374,7 +357,7 @@ read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
 
 case $grubpci in
   Y|y|Yes|yes)
-    sh ./grub_backup.sh
+    # sh ./grub_backup.sh
   #   if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
   # # If the line is commented, remove the comment
   #   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
@@ -444,4 +427,3 @@ esac
       exit 0
       ;;
   esac
-
