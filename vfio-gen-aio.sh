@@ -402,6 +402,7 @@ case $grubpci in
         GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
         GRUB+=" vfio-pci.ids=$pci_id\""
         sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
+        sh ./grub_update.sh
 ;;
   No|no|N|n)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
@@ -420,8 +421,6 @@ case $grubpci in
     exit 0
     ;;
 esac
-
-sh ./grub_update.sh
 
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
  printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
