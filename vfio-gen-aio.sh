@@ -285,6 +285,7 @@ GRUB+=" amd_iommu=on iommu=pt video=efifb:off"
 # Add the equals sign and double quotes
 GRUB="GRUB_CMDLINE_LINUX=\"$GRUB\""
 sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
+sh ./grub_update.sh
 
   printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
   printf "be sure to reboot if you have blacklisted any GPU's\n"
