@@ -228,6 +228,9 @@ sh ./grub_backup.sh
 if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
   # If the line is commented, remove the comment
   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+else
+  # Do nothing
+  :
 fi
 
 
@@ -236,9 +239,9 @@ read -p "Do you want the script to configure grub for you for (I)ntel or (A)md o
 case $cpu in
   I|i|Intel|intel|INTEL)
 echo "This will configure your grub config for virtualization for Intel."
-GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
+GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | cut -d '=' -f 2- | tr -d '"'`
 #adds intel_iommu=on and iommu=pt to the grub config
-GRUB+=" intel_iommu=on iommu=pt video=efifb:off"
+GRUB="$GRUB intel_iommu=on iommu=pt video=efifb:off"
 # Add the equals sign and double quotes
 GRUB="GRUB_CMDLINE_LINUX=\"$GRUB\""
 sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
@@ -272,10 +275,9 @@ fi
 
     echo "This will configure your grub config for virtualization for AMD."
 
-
-GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
+GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | cut -d '=' -f 2- | tr -d '"'`
 #adds amd_iommu=on and iommu=pt to the grub config
-GRUB+=" amd_iommu=on iommu=pt video=efifb:off"
+GRUB="$GRUB amd_iommu=on iommu=pt video=efifb:off"
 # Add the equals sign and double quotes
 GRUB="GRUB_CMDLINE_LINUX=\"$GRUB\""
 sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
