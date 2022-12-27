@@ -223,6 +223,11 @@ else
   clear
 fi
     
+if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # If the line is commented, remove the comment
+  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+fi
+
 
 ### Intel CPU
 read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
@@ -231,11 +236,6 @@ case $cpu in
 echo "This will configure your grub config for virtualization for Intel."
 
 sh ./grub_backup.sh
-
-if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
-  # If the line is commented, remove the comment
-  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
-fi
 
 GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
 #adds intel_iommu=on and iommu=pt to the grub config
@@ -272,11 +272,6 @@ fi
 sh ./grub_backup.sh
 
     echo "This will configure your grub config for virtualization for AMD."
-
-if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
-  # If the line is commented, remove the comment
-  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
-fi
 
 
 GRUB=`cat /etc/default/grub | grep "^GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
@@ -336,10 +331,12 @@ case $breakupGPU in
 sleep 1s
 clear
 
-if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
-  # If the line is commented, remove the comment
-  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
-fi
+# if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+#   # If the line is commented, remove the comment
+#   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+# else
+#   break
+# fi
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
 
@@ -378,10 +375,10 @@ read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
 case $grubpci in
   Y|y|Yes|yes)
     sh ./grub_backup.sh
-    if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
-  # If the line is commented, remove the comment
-    sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
-    fi
+  #   if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # # If the line is commented, remove the comment
+  #   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+  #   fi
     clear
     sleep 2s
     lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
@@ -447,3 +444,4 @@ esac
       exit 0
       ;;
   esac
+
