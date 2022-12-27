@@ -5,18 +5,9 @@ if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root"
    exit 1
 fi
+## Will make every script executable under this directory
+chmod +x *.sh
 
-# This will revert GNU/grub to what it was before with a backup
-# Copy of it, will also check to see if it exists.
-
-if [ -f /etc/default/grub.bak ]; then
-  read -p "Do you want to revert grub? [y/n] " answer
-if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-    mv /etc/default/grub.bak /etc/default/grub &&
-   grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null   
-    echo "grub reverted"
-  fi
-fi
 
 # Will check to see if the blacklist for either graphics card are
 # In modprobe, will ask the user if it wants to remove it
@@ -48,9 +39,11 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   fi
 fi
 
+sh ./grub_revert.sh
+
 # clears the screen on the terminal if that wasn't obvious
 
-clear
+# clear
 
 # Will ask the user if it wants to continue the execution of the bash script
 
@@ -132,7 +125,6 @@ case $yn in
     echo "Not inserting PCI ID into vfio config."
       sleep 1s
       clear
-    break
     ;;
 
   *)
@@ -214,11 +206,11 @@ read -p "Enter Y to update, or N to cancel: " confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
   if [ -f /etc/debian_version ]; then
-    update-initramfs -u
+    update-initramfs -u 2> /dev/null
   elif [ -f /etc/arch-release ]; then
-    mkinitcpio -P
+    mkinitcpio -P 2> /dev/null
   elif [ -f /etc/redhat-release ]; then
-    dracut -f
+    dracut -f 2> /dev/null
   fi
 clear
 sleep 1s
@@ -238,22 +230,19 @@ case $cpu in
   I|i|Intel|intel|INTEL)
 echo "This will configure your grub config for virtualization for Intel."
 
-# Check if a copy of the grub configuration file already exists
-    if ls /etc/default/ | grep -q "grub.bak"; then
-      # If the file exists, skip it
-      echo "A backup of the grub configuration file already exists. Skipping."
-    else
-      # If the file does not exist, create a backup
-      cp /etc/default/grub /etc/default/grub.bak
-      echo "Backed up the grub configuration file to /etc/default/grub.bak"
-    fi
+sh ./grub_backup.sh
 
-GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # If the line is commented, remove the comment
+  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+fi
+
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
 GRUB+=" intel_iommu=on iommu=pt video=efifb:off\""
-sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
+sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
+sh ./grub_update.sh
 
-grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
  printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
   printf "be sure to reboot if you have blacklisted any GPU's\n"
    printf "press Y to reboot now and n to reboot later."
@@ -276,24 +265,21 @@ fi
 
   A|a|amd|Amd|AMD)
 
-# Check if a copy of the grub configuration file already exists
-    if ls /etc/default/ | grep -q "grub.bak"; then
-      # If the file exists, skip it
-      echo "A backup of the grub configuration file already exists. Skipping."
-    else
-      # If the file does not exist, create a backup
-      cp /etc/default/grub /etc/default/grub.bak
-      echo "Backed up the grub configuration file to /etc/default/grub.bak"
-    fi
+
+sh ./grub_backup.sh
 
     echo "This will configure your grub config for virtualization for AMD."
 
-GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # If the line is commented, remove the comment
+  sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+fi
+
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
 #adds amd_iommu=on and iommu=pt to the grub config
 GRUB+=" amd_iommu=on iommu=pt video=efifb:off\""
-sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
+sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
 
-grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&   
   printf "Grub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
   printf "be sure to reboot if you have blacklisted any GPU's\n"
    printf "press Y to reboot now and n to reboot later (if you want other options)."
@@ -317,7 +303,7 @@ sleep 1s
 echo echo "Not configuring GRUB"
 sleep 1s
 clear
-   break;;
+   ;;
    *) 
 clear
 sleep 1s
@@ -346,12 +332,17 @@ clear
 
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
-      GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
-      #adds amd_iommu=on and iommu=pt to the grub config
-      GRUB+=" pcie_acs_override=downstream,multifunction\""
-      sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
 
-      grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
+    GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
+    #adds amd_iommu=on and iommu=pt to the grub config
+    GRUB+=" pcie_acs_override=downstream,multifunction\""
+    sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
+
+
+sh ./grub_update.sh
+
+# grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
+# grub2-mkconfig -o /boot/grub2/grub2.cfg 2> /dev/null
       ;;
      N|n|No|no)
     # If the user enters an invalid choice, display an error message and exit the script
@@ -376,14 +367,7 @@ read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
 
 case $grubpci in
   Y|y|Yes|yes)
-      if ls /etc/default/ | grep -q "grub.bak"; then
-      # If the file exists, skip it
-      echo "A backup of the grub configuration file already exists. Skipping."
-    else
-      # If the file does not exist, create a backup
-      cp /etc/default/grub /etc/default/grub.bak
-      echo "Backed up the grub configuration file to /etc/default/grub.bak"
-    fi
+    sh ./grub_backup.sh
     clear
     sleep 2s
     lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
@@ -401,10 +385,10 @@ case $grubpci in
 
     # Append the options vfio-pci line to /etc/default/grub using sed
     # The -i option is used to edit the file in place and the -e option is used to specify the sed script
-        GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+        GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX=.*" | rev | cut -c 2- | rev`
         GRUB+=" vfio-pci.ids=$pci_id\""
-        sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|" /etc/default/grub
-    ;;
+        sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
+;;
   No|no|N|n)
     # If the user does not want to insert the PCI ID into GRUB, exit the script
     printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
@@ -423,9 +407,9 @@ case $grubpci in
     ;;
 esac
 
-# Update the GRUB configuration file
-grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
-
+# # Update the GRUB configuration file
+# grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
+# grub2-mkconfig -o /boot/grub2/grub2.cfg 2> /dev/null
 # Check if the vfio-pci device was created successfully
 # if dmesg | grep -q "IOMMU"; then
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
@@ -453,3 +437,4 @@ grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null
       exit 0
       ;;
   esac
+
