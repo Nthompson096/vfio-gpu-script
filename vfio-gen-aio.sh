@@ -421,11 +421,8 @@ case $grubpci in
     ;;
 esac
 
-# # Update the GRUB configuration file
-# grub-mkconfig -o /boot/grub/grub.cfg 2> /dev/null &&
-# grub2-mkconfig -o /boot/grub2/grub2.cfg 2> /dev/null
-# Check if the vfio-pci device was created successfully
-# if dmesg | grep -q "IOMMU"; then
+sh ./grub_update.sh
+
   # If the vfio-pci device was created successfully, display a success message and ask the user if they want to reboot
  printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
   printf "be sure to reboot if you have blacklisted any GPU's\n"
