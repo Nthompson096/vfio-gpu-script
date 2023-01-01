@@ -47,11 +47,11 @@ you can view your GFX card with ``lspci`` and it should give you the PCI-E numbe
 
 ## I have issues with SElinux with my NTFS drive, VM will not start and or it crashes, already set permissons and groups (fedora)
 
-Use this to enable VM's on 
+Use this to enable VM's on a NTFS drive (selinux)
 
     setsebool  virt_use_fusefs=on
 
-and before you run this script be sure to enter this following command to update grub and reboot
+and before you run this script be sure to enter this following command to update grub and reboot (virt-manager crash windows any)
 
     sudo grubby --update-kernel=ALL --args='kvm.ignore_msrs=1'
 
