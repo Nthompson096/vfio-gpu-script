@@ -42,6 +42,45 @@ This should help; keep in mind that it will suspend your host so you'll have to 
 
 you can view your GFX card with ``lspci`` and it should give you the PCI-E numbers such as ``09:00.0`` and ``09:00.1`` for an example.
 
+
+# For Fedora
+
+## I have issues with SElinux with my NTFS drive, VM will not start and or it crashes, already set permissons and groups (fedora)
+
+Use this to enable VM's on 
+
+    setsebool  virt_use_fusefs=on
+
+and before you run this script be sure to enter this following command to update grub and reboot
+
+    sudo grubby --update-kernel=ALL --args='kvm.ignore_msrs=1'
+
+If all else fails you'll probably have to either set seliunx to ``permissive`` or ``disabled`` it inside ```/etc/selinux/config```
+
+You can also set it wil grubby, that's inside the selinux config, will not cover here though.
+
+## I have no idea how to set permisisons and groups inside fedora 
+
+    sudo usermod -a -G libvirt $(whoami)
+    
+and be sure to add yourself to the qemu file like so in ```/etc/libvirt/qemu.conf```
+
+      user = "1000"
+      
+    # The group for QEMU processes run by the system instance. It can be
+    # specified in a similar way to user.
+      group = "libvirt"
+
+The following above was an example and a Userid of the current user, which is you; you can change it to something you'd want.
+
+## Fstab
+
+     LABEL=SO /mnt/sdd1  ntfs-3g default_permissons,allow_other,uid=1000,gid=1000,rw,umask=000 0 0
+     
+
+An example of a fstab drive; change it to what you will but it seems to work pretty well under fedora.
+
+
 ## GIF Examples
 
 *  *inital startup*
