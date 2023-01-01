@@ -1,11 +1,13 @@
 #!/bin/bash
 #####
-###MAIN SCRIPT DO NOT EDIT
+### MAIN SCRIPT DO NOT EDIT
 #####
 #####
-###Feel free to edit/modify grub_revert.sh, grub_update.sh and grub_backup.sh respectively
+### Feel free to edit/modify grub_revert.sh, grub_update.sh and grub_backup.sh respectively
+### Additonally, grub_revert and grub_update pretty much work in conjunction with eachother, because it is grub.
 #####
 #####
+#
 # Check if the script is being run as root
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root"
