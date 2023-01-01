@@ -1,5 +1,11 @@
 #!/bin/bash
-
+#####
+###MAIN SCRIPT DO NOT EDIT
+#####
+#####
+###Feel free to edit/modify grub_revert.sh, grub_update.sh and grub_backup.sh respectively
+#####
+#####
 # Check if the script is being run as root
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root"
