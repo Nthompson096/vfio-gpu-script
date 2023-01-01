@@ -75,7 +75,7 @@ The following above was an example and a Userid of the current user, which is yo
 
 ## Fstab
 
-     LABEL=SO /mnt/sdd1  ntfs-3g default_permissons,allow_other,uid=1000,gid=1000,rw,umask=000 0 0
+     ntfs-3g default_permissons,allow_other,uid=1000,gid=1000,rw,umask=000 0 0
      
 
 An example of a fstab drive; change it to what you will but it seems to work pretty well under fedora.
