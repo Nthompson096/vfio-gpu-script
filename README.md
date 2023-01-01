@@ -73,7 +73,7 @@ and be sure to add yourself to the qemu file like so in ```/etc/libvirt/qemu.con
 
 The following above was an example and a Userid of the current user, which is you; you can change it to something you'd want.
 
-## Fstab
+## Fstab (NTFS)
 
      ntfs-3g default_permissons,allow_other,uid=1000,gid=1000,rw,umask=000 0 0
      
