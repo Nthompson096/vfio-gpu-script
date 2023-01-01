@@ -4,7 +4,8 @@
 #####
 #####
 ### Feel free to edit/modify grub_revert.sh, grub_update.sh and grub_backup.sh respectively
-### Additonally, grub_revert and grub_update pretty much work in conjunction with eachother, because it is grub.
+### Additonally, these scripts that I had mentioned work with eachother, because these are for the grub bootloader for your linux distro.
+### And it would be wise to edit these scripts if there was a distro that I happen to miss.
 #####
 #####
 #
