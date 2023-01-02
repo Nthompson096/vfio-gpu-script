@@ -11,9 +11,9 @@ virt-manager, qemu-full, a rom for your GPU; you can use a rom dumping utility o
 
 For trying to pass though Nvidia you'll need to apply this patch and install either of these kernels listed in this wiki [if you use arch](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch))
 And for the sake of it, here's a video from [Pavol Elsig](https://www.youtube.com/watch?v=JBEzshbGPhQ) which should be an easier guide also a level1tech guide [here](https://forum.level1techs.com/t/how-to-apply-acs-override-patch-kubuntu-18-10-kernel-4-18-16/134204/2).
-Also a guide on Fedora and redhat [here](https://github.com/some-natalie/fedora-acs-override) you may also install [liquorix](https://liquorix.net/) instead if you'd like.
+Also a guide on Fedora and redhat [here](https://github.com/some-natalie/fedora-acs-override) you may also install [liquorix](https://liquorix.net/) instead if you'd like (fedora is below).
 
-for issues with the mouse you'll need to use evdev, guide to do so is in [here](https://github.com/Nthompson096/KVM-GPU-Passthrough/blob/main/README.md#4-usb-redirect-with-evdev) you may also use some of the qemu commands I've pointed out [here](https://github.com/Nthompson096/KVM-GPU-Passthrough#for-people-having-issues-with-games-such-as-red-dead-2-enter-this-value-here-inside-the-xml-document-for-your-newcurrent-vm).
+for issues with the mouse you'll need to use evdev, guide to do so is in [here](https://github.com/Nthompson096/KVM-GPU-Passthrough/blob/main/README.md#4-usb-redirect-with-evdev) (may not work for fedora; you'll need to run though a [few hoops probably](https://passthroughpo.st/using-evdev-passthrough-seamless-vm-input/)) you may also use some of the qemu commands I've pointed out [here](https://github.com/Nthompson096/KVM-GPU-Passthrough#for-people-having-issues-with-games-such-as-red-dead-2-enter-this-value-here-inside-the-xml-document-for-your-newcurrent-vm).
 
 ## What this script does!
 
@@ -45,6 +45,15 @@ you can view your GFX card with ``lspci`` and it should give you the PCI-E numbe
 
 # For Fedora
 
+
+
+## liquorix
+
+    sudo dnf copr enable rmnscnce/kernel-lqx
+    sudo dnf in kernel-lqx
+
+
+
 ## I have issues with SElinux with my NTFS drive, VM will not start and or it crashes, already set permissons and groups (fedora)
 
 Use this to enable VM's on a NTFS drive (selinux)
@@ -52,6 +61,9 @@ Use this to enable VM's on a NTFS drive (selinux)
     setsebool  virt_use_fusefs=on
 
 and before you run this script be sure to enter this following command to update grub and reboot (virt-manager crash windows any)
+
+
+You'll also need to set your processor to QEMU and clear the current processor config from copying the current host.
 
     sudo grubby --update-kernel=ALL --args='kvm.ignore_msrs=1'
 
