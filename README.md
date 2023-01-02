@@ -47,6 +47,15 @@ you can view your GFX card with ``lspci`` and it should give you the PCI-E numbe
 
 # For Fedora
 
+You would need to install vim-common for this
+
+    #!/bin/bash
+
+    hexdump -ve '1/1 "%.2x"' ./qemu-system-x86_64 |
+    sed -e 's/424f4348/434f4348/g' -e 's/42585043/44585043/g' |
+    xxd -r -p > ./qemu-system-x86_64-pass
+
+This would patch your qemu-system to not be easily found for gaming basically; otherwise you'd have to do it manually.
 
 
 ## liquorix
