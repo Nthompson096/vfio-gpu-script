@@ -29,7 +29,7 @@ for issues with the mouse you'll need to use evdev, guide to do so is in [here](
 
 ## I have issues with resetting a GPU from AMD
 
-This should help; keep in mind that it will suspend your host so you'll have to just click a keyboard button; you'll need to run this script as a super user (sudo) also be sure to edit the values for the PCI devices (you can find it with ``lspci``)
+This should help; keep in mind that it will suspend your host so you'll have to just click a keyboard button; you'll need to run this script as a super user (sudo) also be sure to edit the values for the PCI devices.
 
     #!/bin/bash
     echo 1 > /sys/bus/pci/devices/0000:00:00.0/remove
