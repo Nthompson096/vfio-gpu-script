@@ -219,7 +219,7 @@ if [[ $confirm == "Y" || $confirm == "y" ]]; then
   elif [ -f /etc/arch-release ]; then
     mkinitcpio -P 
   elif [ -f /etc/redhat-release ]; then
-    dracut -f 
+    dracut --regenerate-all -f
   fi
 clear
 sleep 1s
