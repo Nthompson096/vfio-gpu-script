@@ -69,7 +69,7 @@ and be sure to add yourself to the qemu file like so in ```/etc/libvirt/qemu.con
       
     # The group for QEMU processes run by the system instance. It can be
     # specified in a similar way to user.
-      group = "libvirt"
+      group = "kvm"
 
 The following above was an example and a Userid of the current user, which is you; you can change it to something you'd want.
 
