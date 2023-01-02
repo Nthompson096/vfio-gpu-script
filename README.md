@@ -13,7 +13,7 @@ This is what you'll need:
 
 For trying to pass though Nvidia you'll need to apply this patch and install either of these kernels listed in this wiki [if you use arch](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch))
 And for the sake of it, here's a video from [Pavol Elsig](https://www.youtube.com/watch?v=JBEzshbGPhQ) which should be an easier guide also a level1tech guide [here](https://forum.level1techs.com/t/how-to-apply-acs-override-patch-kubuntu-18-10-kernel-4-18-16/134204/2).
-Also a guide on Fedora and redhat [here](https://github.com/some-natalie/fedora-acs-override) you may also install [liquorix](https://liquorix.net/) instead if you'd like (fedora is below).
+There's a repo on ASC+PCI patching [here](https://github.com/some-natalie/fedora-acs-override) however you'd have to rebuild the kernel apparently so if you do not wish to do so you may install [liquorix](https://liquorix.net/) instead if you'd like (fedora command is below).
 
 for issues with the mouse you'll need to use evdev, guide to do so is in [here](https://github.com/Nthompson096/KVM-GPU-Passthrough/blob/main/README.md#4-usb-redirect-with-evdev) (may not work for fedora; you'll need to run though a [few hoops probably](https://passthroughpo.st/using-evdev-passthrough-seamless-vm-input/)) you may also use some of the qemu commands I've pointed out [here](https://github.com/Nthompson096/KVM-GPU-Passthrough#for-people-having-issues-with-games-such-as-red-dead-2-enter-this-value-here-inside-the-xml-document-for-your-newcurrent-vm).
 
