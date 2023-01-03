@@ -74,7 +74,7 @@ Use this to enable VM's on a NTFS drive (selinux)
 and before you run this script be sure to enter this following command to update grub and reboot (virt-manager crash windows any)
 
 
-You'll also need to set your processor to QEMU and clear the current processor config from copying the current host.
+You'll also need to set your processor to QEMU and clear the current processor config from copying the current host; then you may set it back after a windows install.
 
     sudo grubby --update-kernel=ALL --args='kvm.ignore_msrs=1'
 
