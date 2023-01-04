@@ -115,6 +115,6 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 ![](https://i.imgur.com/TuVIzoJ.gif)
 
 
-## Current list of compat distros with no black screens (least for my card experince may vary)
+## Current list of compat distros with no black screens (least for my card experience may vary)
 
 ![](https://i.imgur.com/IAJjW4k.png)
