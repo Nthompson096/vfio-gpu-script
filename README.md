@@ -124,9 +124,11 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 * AMD+Debian=Doesn't fully support AMD.
 * AMD+arch=supported
 * AMD+Fedora=Not supported
+* AMD*Windows=Supported
 
 ### NVIDIA
 * NVIDIA+Ubuntu=supported
 * NVIDIA+Arch=supported
 * NVIDIA+Debian=supported
 * NVIDIA+Fedora=Supported
+* AMD+Windows=Supported
