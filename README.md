@@ -117,4 +117,16 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 
 ## Current list of compat distros with no black screens (least for my card experience may vary)
 
-![](https://i.imgur.com/KkUV2NJ.png)
+### This will imply that you have dumped the ROM and loaded along with your PCI-e card UNDER FEDORA or possibly other Linux besides arch based; remember mileage may vary.
+
+### AMD
+* AMD+Ubuntu=supported on the latest release.
+* AMD+Debian=Doesn't fully support AMD.
+* AMD+arch=supported
+* AMD+Fedora=Not supported
+
+### NVIDIA
+* NVIDIA+Ubuntu=supported
+* NVIDIA+Arch=supported
+* NVIDIA+Debian=supported
+* NVIDIA+Fedora=Supported
