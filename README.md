@@ -131,4 +131,4 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 * NVIDIA+Arch=supported
 * NVIDIA+Debian=supported
 * NVIDIA+Fedora=Supported
-* AMD+Windows=Supported
+* NVIDIA+Windows=Supported
