@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### Intel CPU
-read -p "Do you want the script to configure grub for you for (I)ntel or (A)md or (N)o?" cpu
+read -p "Do you want the script to configure grub for you for (I)ntel or (A)md? Enter for No." cpu
 case $cpu in
   I|i|Intel|intel|INTEL)
 echo "This will configure your grub config for virtualization for Intel."
@@ -65,13 +65,6 @@ echo "Not rebooting"
     clear
 fi
     ;;
-  N|n|No|no)
-clear
-sleep 1s
-echo echo "Not configuring GRUB"
-sleep 1s
-clear
-   ;;
    *) 
 clear
 sleep 1s
