@@ -69,7 +69,10 @@ else
 fi
 
 # Prompt the user to choose which GPU to blacklist
-read -p "Do you want to blacklist AMD or NVIDIA GPUs? You'll need to reboot... [A/N/enter for no] " gblacklist
+echo "[A/N/enter for no]"
+echo "Do you want to blacklist AMD or NVIDIA GPUs?"
+echo "You'll need to reboot..." 
+read gblacklist
 
 case $gblacklist in
   A|a)
@@ -79,6 +82,8 @@ case $gblacklist in
    echo "blacklist radeon" >> /etc/modprobe.d/blacklist-amd.conf
 
     echo "AMD GPUs have been blacklisted"
+    sleep 1s
+    clear
     ;;
   N|n)
     # Blacklist NVIDIA GPUs
@@ -90,6 +95,8 @@ case $gblacklist in
     echo "blacklist nvidiafb" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "blacklist nvidia_drm" >> /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA GPUs have been blacklisted"
+    sleep 1s
+    clear
     ;;
 *)
     echo "not creating a blacklist..."
@@ -106,8 +113,10 @@ esac
 
 # Will ask the user if it wants create a VFIO file, will exit the script if no input if yes
 # Thinking about creating a loop of some or moving the IF command somehow.
-
-read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (y/enter for no) " yn
+echo "(y/enter for no)"
+echo "(required you to update mkinitcpio, we will ask you later)"
+echo "Would you like to insert your PCI ID into a vfio file?"
+read yn
 
 case $yn in
    Y|y|Yes|yes) lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
@@ -140,8 +149,9 @@ case $yn in
 esac
 
 # NVIDIA softdep option for VFIO-pci; should load the driver ahead of time...
-
-read -p "Do you want to create pre: vfio-pci for nvidia or AMD GPU's? [N(vidia)|n(vidia)/A(md)|a(md)/Enter for no] " softdep
+echo "[N(vidia)|n(vidia)/A(md)|a(md)/Enter for no]"
+echo "Do you want to create pre: vfio-pci for nvidia or AMD GPU's?" 
+read softdep
 
 case $softdep in
   N|n)
@@ -172,8 +182,10 @@ case $softdep in
     ;;
 esac
 
-echo "Do you want to update your initramfs/mkinitcpio? required for vfio.conf"
-read -p "Enter Y to update, or Anything else to cancel: " confirm
+echo "required for vfio.conf"
+echo "Do you want to update your initramfs/mkinitcpio?"
+echo "Enter Y to update, or Anything else to cancel:"
+read confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
   if [ -f /etc/debian_version ]; then
@@ -210,8 +222,12 @@ sh ./cpu-options.sh
 
 #Ask the user if they want to breakup GPU, inform them it will require the ACS patch.
 
-echo "feel free to read: https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)"
-read -p "Would you like to create ASC gpu breakups in grub? required you'd install the ASC patch. (y/enter for no) " breakupGPU
+echo "(y/enter for no)"
+echo "feel free to read:" 
+echo "https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)"
+echo "Would you like to create ASC gpu breakups in grub?." 
+echo "required you'd install the ASC patch"
+read breakupGPU
 
 case $breakupGPU in
   Y|y|Yes|yes)
@@ -241,7 +257,9 @@ sh ./grub_update.sh
 esac
 
 # Ask the user if they want to input the PCI ID into GRUB
-read -p "Would you like to insert your PCI ID into GRUB? (y/enter for no) " grubpci
+echo "(y/enter for no)"
+echo "Would you like to insert your PCI ID into GRUB?" 
+read grubpci
 
 case $grubpci in
   Y|y|Yes|yes)

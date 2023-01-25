@@ -1,7 +1,9 @@
 #!/bin/bash
 
 ### Intel CPU
-read -p "Do you want the script to configure grub for you for (I)ntel or (A)md? Enter for No." cpu
+echo "(I)ntel / (A)md / Enter for No"
+echo "Do you want the script to configure grub for you?"
+read cpu
 case $cpu in
   I|i|Intel|intel|INTEL)
 echo "This will configure your grub config for virtualization for Intel."
