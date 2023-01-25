@@ -19,8 +19,7 @@ chmod +x *.sh
 # In modprobe, will ask the user if it wants to remove it
 
 if [ -f /etc/modprobe.d/blacklist-nvidia.conf ]; then
-  echo "Do you want to delete the NVIDIA blacklist? [y/n]" 
-  read answer
+  read -p "Do you want to delete the NVIDIA blacklist? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/blacklist-nvidia.conf
     echo "NVIDIA blacklist deleted."
@@ -28,8 +27,7 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 fi
 
 if [ -f /etc/modprobe.d/blacklist-amd.conf ]; then
-  echo "Do you want to delete the AMD blacklist? [y/n]"
-  read answer
+  read -p "Do you want to delete the AMD blacklist? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/blacklist-amd.conf
     echo "AMD blacklist deleted."
@@ -40,8 +38,7 @@ fi
 # if it wants it deleted
 
 if [ -f /etc/modprobe.d/vfio.conf ]; then
-  echo "Do you want to delete the VFIO file? [y/n]"
-  read answer
+  read -p "Do you want to delete the VFIO file? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/vfio.conf
     echo "VFIO file deleted."
