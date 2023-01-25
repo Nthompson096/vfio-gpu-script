@@ -92,12 +92,17 @@ case $gblacklist in
     echo "NVIDIA GPUs have been blacklisted"
     ;;
 *)
-    # if no value, will skip the creation of a blacklist for either card.
-    echo "Not creating a blacklist."
+    echo "not creating a blacklist..."
     sleep 1s
     clear
-    ;;
+   
+    ;;  
 esac
+
+# while [[ $gblacklist != "A" && $gblacklist != "N" && $gblacklist != "" ]]; do
+#   echo "Please enter either 'A' or 'N' (or just press enter to skip)."
+#   read -p "Do you want to blacklist AMD or NVIDIA GPUs? You'll need to reboot... [A/N/enter for no] " gblacklist
+# done
 
 # Will ask the user if it wants create a VFIO file, will exit the script if no input if yes
 # Thinking about creating a loop of some or moving the IF command somehow.
@@ -145,10 +150,10 @@ esac
 
 # NVIDIA softdep option for VFIO-pci; should load the driver ahead of time...
 
-read -p "Do you want to create pre: vfio-pci for nvidia GPU's? [Y/No] " softdep_nvidia
+read -p "Do you want to create pre: vfio-pci for nvidia or AMD GPU's? [N(vidia)|n(vidia)/A(md)|a(md)/Enter] " softdep
 
-case $softdep_nvidia in
-  Y|y|Yes|yes)
+case $softdep in
+  N|n)
     # fio-pci for nvidia
   printf "softdep nouveau pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
   printf "\nsoftdep nvidia_drm pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
@@ -158,30 +163,7 @@ case $softdep_nvidia in
   echo "created softdep for nvidia-cards"
   sleep 1s
    ;;
-  No|no|N|n)
- # Invalid choice, skipping
-      clear
-      sleep 1s
-      echo "Not creating a softdep."
-      sleep 1s
-      clear
-    ;;
-   *)
- # Invalid choice, skipping
-      clear
-      sleep 1s
-      echo "Not creating a softdep."
-      sleep 1s
-      clear
-    ;;
-esac
-
-# AMD Softdep vfio configs
-
-read -p "Do you want to create pre: vfio-pci for AMD GPU's? [Y/No] " softdep_AMD
-
-case $softdep_AMD in
-  Y|y|Yes|yes)
+  A|a)
     # fio-pci for AMD
   printf "softdep radeon pre: vfio-pci" >> /etc/modprobe.d/vfio.conf
   printf "\nsoftdep amdgpu pre: vfio-pci\n" >> /etc/modprobe.d/vfio.conf
@@ -189,14 +171,6 @@ case $softdep_AMD in
   echo "created softdep for AMD-cards"
   sleep 1s
    ;;
-  No|no|N|n)
-    # Invalid choice, skipping
-      clear
-      sleep 1s
-      echo "Not creating a softdep."
-      sleep 1s
-      clear
-    ;;
    *)
  # Invalid choice, skipping
       clear
@@ -358,4 +332,3 @@ esac
       exit 0
       ;;
   esac
-
