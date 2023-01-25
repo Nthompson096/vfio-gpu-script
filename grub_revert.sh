@@ -36,7 +36,8 @@ esac
 
 # Check if the file exists
 if [ -f /etc/default/grub.bak ]; then
-  read -p "Do you want to revert grub for $os_name? [y/n] " answer
+  echo "Do you want to revert grub for $os_name? [y/n]" 
+  read answer
   if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     case "$os_name" in
       "Red Hat Enterprise Linux" | "CentOS")
