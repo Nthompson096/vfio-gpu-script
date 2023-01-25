@@ -99,7 +99,15 @@ case $gblacklist in
     ;;  
 esac
 
-read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (y/n) " yn
+# while [[ $gblacklist != "A" && $gblacklist != "N" && $gblacklist != "" ]]; do
+#   echo "Please enter either 'A' or 'N' (or just press enter to skip)."
+#   read -p "Do you want to blacklist AMD or NVIDIA GPUs? You'll need to reboot... [A/N/enter for no] " gblacklist
+# done
+
+# Will ask the user if it wants create a VFIO file, will exit the script if no input if yes
+# Thinking about creating a loop of some or moving the IF command somehow.
+
+read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (y/enter for no) " yn
 
 case $yn in
    Y|y|Yes|yes) lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
@@ -121,15 +129,6 @@ case $yn in
       clear
             echo "options vfio-pci ids=$pci_id" > /etc/modprobe.d/vfio.conf
             ;;
-  No|N|n|no)
-    # If the user does not want to insert the PCI ID into GRUB, exit the script
-          clear
-      sleep 1s
-    echo "Not inserting PCI ID into vfio config."
-      sleep 1s
-      clear
-    ;;
-
   *)
     # If the user enters an invalid choice, will skip the creation of a VFIO file.
           clear
@@ -174,7 +173,7 @@ case $softdep in
 esac
 
 echo "Do you want to update your initramfs/mkinitcpio? required for vfio.conf"
-read -p "Enter Y to update, or N to cancel: " confirm
+read -p "Enter Y/y to update, or Anything else to cancel: " confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
   if [ -f /etc/debian_version ]; then
@@ -212,7 +211,7 @@ sh ./cpu-options.sh
 #Ask the user if they want to breakup GPU, inform them it will require the ACS patch.
 
 echo "feel free to read: https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)"
-read -p "Would you like to create ASC gpu breakups in grub? required you'd install the ASC patch. (y/n) " breakupGPU
+read -p "Would you like to create ASC gpu breakups in grub? required you'd install the ASC patch. (y/enter for no) " breakupGPU
 
 case $breakupGPU in
   Y|y|Yes|yes)
@@ -230,15 +229,7 @@ clear
 
 sh ./grub_update.sh
 
-      ;;
-     N|n|No|no)
-    # If the user enters an invalid choice, display an error message and exit the script
-    clear
-    sleep 1s
-    echo "Not creating GPU breakups"
-    sleep 1s
-    clear
-    ;;
+  ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
     clear
@@ -250,10 +241,15 @@ sh ./grub_update.sh
 esac
 
 # Ask the user if they want to input the PCI ID into GRUB
-read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
+read -p "Would you like to insert your PCI ID into GRUB? (y/enter for no) " grubpci
 
 case $grubpci in
   Y|y|Yes|yes)
+    # sh ./grub_backup.sh
+  #   if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
+  # # If the line is commented, remove the comment
+  #   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
+  #   fi
     clear
     sleep 2s
     lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
@@ -276,14 +272,6 @@ case $grubpci in
         sed -i -e "s/^GRUB_CMDLINE_LINUX=.*/${GRUB}/" /etc/default/grub
         sh ./grub_update.sh
 ;;
-  No|no|N|n)
-    # If the user does not want to insert the PCI ID into GRUB, exit the script
-    printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
-    printf "be sure to reboot if you have blacklisted any GPU's\n"
-    printf "or if you made changes to your grub.\n"
-    echo "Not inserting PCI ID into GRUB, have a nice day."
-    exit 0
-    ;;
   *)
     # If the user enters an invalid choice, display an error message and exit the script
     printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
@@ -305,16 +293,11 @@ esac
       # If the user wants to reboot, reboot the system
       reboot
       ;;
-    No|no|N|n)
+  *)
       # If the user does not want to reboot, exit the script
       printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
       printf "be sure to reboot if you have blacklisted any GPU's\n"
       printf "press Y to reboot now and n to reboot later.\n"
-      echo "Reboot not performed, have a nice day."
-      exit 0
-      ;;
-    *)
-      # If the user enters an invalid choice, display an error message and exit the script
       echo "Reboot not performed, have a nice day."
       exit 0
       ;;
