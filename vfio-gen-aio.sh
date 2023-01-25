@@ -173,15 +173,15 @@ case $softdep in
 esac
 
 echo "Do you want to update your initramfs/mkinitcpio? required for vfio.conf"
-read -p "Enter Y/y to update, or Anything else to cancel: " confirm
+read -p "Enter Y to update, or Anything else to cancel: " confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
   if [ -f /etc/debian_version ]; then
-    update-initramfs -u
+    update-initramfs -u &> /dev/null
   elif [ -f /etc/arch-release ]; then
-    mkinitcpio -P 
+    mkinitcpio -P &> /dev/null
   elif [ -f /etc/redhat-release ]; then
-    dracut --regenerate-all -f
+    dracut --regenerate-all -f &> /dev/null
   fi
 clear
 sleep 1s
