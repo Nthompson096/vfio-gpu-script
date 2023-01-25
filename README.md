@@ -3,7 +3,7 @@ A gpu script partially by AI, useful for blacklisting AMD or NVIDIA GPU's on a d
 
 ## How to activate
 
-simply clone this archive (or download this script), then make this script executable with ```sudo chmod +x;``` afterwards run ```./vfio-gen-aio.sh``` in your terminal of choice.
+simply clone this archive (or download this script), then make this script executable with ```sudo chmod +x;``` afterwards run ```sudo ./vfio-gen-aio.sh``` or ```sudo sh ./vfio-gen-aio.sh``` in your terminal of choice.
 
 This is what you'll need:
 
