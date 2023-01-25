@@ -99,14 +99,6 @@ case $gblacklist in
     ;;  
 esac
 
-# while [[ $gblacklist != "A" && $gblacklist != "N" && $gblacklist != "" ]]; do
-#   echo "Please enter either 'A' or 'N' (or just press enter to skip)."
-#   read -p "Do you want to blacklist AMD or NVIDIA GPUs? You'll need to reboot... [A/N/enter for no] " gblacklist
-# done
-
-# Will ask the user if it wants create a VFIO file, will exit the script if no input if yes
-# Thinking about creating a loop of some or moving the IF command somehow.
-
 read -p "Would you like to insert your PCI ID into a vfio file (required you to update mkinitcpio, we will ask you later)? (y/n) " yn
 
 case $yn in
@@ -150,7 +142,7 @@ esac
 
 # NVIDIA softdep option for VFIO-pci; should load the driver ahead of time...
 
-read -p "Do you want to create pre: vfio-pci for nvidia or AMD GPU's? [N(vidia)|n(vidia)/A(md)|a(md)/Enter] " softdep
+read -p "Do you want to create pre: vfio-pci for nvidia or AMD GPU's? [N(vidia)|n(vidia)/A(md)|a(md)/Enter for no] " softdep
 
 case $softdep in
   N|n)
@@ -262,11 +254,6 @@ read -p "Would you like to insert your PCI ID into GRUB? (y/n) " grubpci
 
 case $grubpci in
   Y|y|Yes|yes)
-    # sh ./grub_backup.sh
-  #   if grep -q "^#GRUB_CMDLINE_LINUX=" /etc/default/grub; then
-  # # If the line is commented, remove the comment
-  #   sed -i -e "s/^#GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=/" /etc/default/grub
-  #   fi
     clear
     sleep 2s
     lspci -nn | grep "VGA" && lspci -nn | grep "Audio" &&
