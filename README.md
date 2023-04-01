@@ -15,6 +15,7 @@ And for the sake of it, here's a video from [Pavol Elsig](https://www.youtube.co
 There's a repo on ASC+PCI patching [here](https://github.com/some-natalie/fedora-acs-override) however you'd have to rebuild the kernel apparently so if you do not wish to do so you may install [liquorix](https://liquorix.net/) instead if you'd like (fedora command is below).
 
 for issues with the mouse/keyboard you'll need to use evdev, guide to do so is in inside the [archwiki](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Passing_keyboard/mouse_via_Evdev) you may also use some of the qemu commands I've pointed out [here](https://github.com/Nthompson096/KVM-GPU-Passthrough#for-people-having-issues-with-games-such-as-red-dead-2-enter-this-value-here-inside-the-xml-document-for-your-newcurrent-vm).
+For issues with a stuck keyboard mouse input you may need the VFIO drivers; here's an (https://fedorapeople.org/groups/virt/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso)[ISO] file for it.
 
 ## What this script does!
 
