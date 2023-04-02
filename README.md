@@ -138,6 +138,7 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 If you ever want to use an exisitng installation on your NTFS drive you'll need to do the following
 
 * Rename the Steam folder to Steam-old, create a new Steam folder
+* Open steam
 * Point the new steam install directory to your "new" install directory on the old drive
 * Close Steam
 * Delete the Steam folder DO NOT DELETE THE STEAM-OLD FOLDER
