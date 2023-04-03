@@ -135,11 +135,11 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 
 # BONUS playing on linux and windows troubleshooting
 
-# Proton has failed to start
+### Proton has failed to start
 
 Try setting your client to beta and restart, it should work then.
 
-# Existing installation from a NTFS drive
+### Existing installation from a NTFS drive
 
 If you ever want to use an exisitng installation on your NTFS drive you'll need to do the following
 
@@ -152,7 +152,7 @@ If you ever want to use an exisitng installation on your NTFS drive you'll need 
 * ???
 * Profit
 
-# Write issues
+### Write issues
 
 There could be issues with NTFS; firstly see if you can verify the steam files, if this doesn't work then you'll have to run chkdsk with windows in recovery mode; you should know how to pass a phyical drive by now.
 
