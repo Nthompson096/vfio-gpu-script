@@ -135,6 +135,12 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 
 # BONUS playing on linux and windows troubleshooting
 
+# Proton has failed to start
+
+Try setting your client to beta and restart, it should work then.
+
+# Existing installation from a NTFS drive
+
 If you ever want to use an exisitng installation on your NTFS drive you'll need to do the following
 
 * Rename the Steam folder to Steam-old, create a new Steam folder
