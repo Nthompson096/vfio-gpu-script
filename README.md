@@ -137,7 +137,7 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 
 ### Proton has failed to start
 
-Try setting your client to beta and restart, it should work then.
+Try setting your client to beta and restart, it should work then, if you'd want you may switch it back.
 
 ### Existing installation from a NTFS drive
 
