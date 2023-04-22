@@ -41,9 +41,16 @@ This should help; keep in mind that it will suspend your host so you'll have to 
     echo 1 > /sys/bus/pci/rescan    
     echo "Reset done"
 
-
 you can view your GFX card with ``lspci`` and it should give you the PCI-E numbers such as ``09:00.0`` and ``09:00.1`` for an example.
 
+### I have issues with my display, I am using AMD.
+
+You would have to generate your initial ramdisk environments:
+example for arch, which is what I'm using.
+
+    sudo mkinitcpio --allpresets
+
+Be sure to check the man pages, or install [tldr](https://tldr.sh/).
 
 # For Fedora
 
