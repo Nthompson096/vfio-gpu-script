@@ -43,13 +43,23 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
     rm /etc/modprobe.d/vfio.conf
     echo "VFIO file deleted."
   fi
+  if [ -f /etc/debian_version ]; then
+    update-initramfs -u &> /dev/null
+  elif [ -f /etc/arch-release ]; then
+    mkinitcpio -P &> /dev/null
+  elif [ -f /etc/redhat-release ]; then
+    dracut --regenerate-all -f &> /dev/null
+  fi
+clear
+sleep 1s
+  echo "Initramfs/mkinitcpio updated successfully"
+sleep 1s
+  clear
 fi
 
 sh ./grub_revert.sh
 
 # clears the screen on the terminal if that wasn't obvious
-
-# clear
 
 # Will ask the user if it wants to continue the execution of the bash script
 
