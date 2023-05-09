@@ -40,10 +40,9 @@ fi
 if [ -f /etc/modprobe.d/vfio.conf ]; then
   read -p "Do you want to delete the VFIO file? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+echo "VFIO file deleted. regenerating Initramfs/mkinitcpio....."
     rm /etc/modprobe.d/vfio.conf
-    echo "VFIO file deleted."
-  fi
-  if [ -f /etc/debian_version ]; then
+    if [ -f /etc/debian_version ]; then
     update-initramfs -u &> /dev/null
   elif [ -f /etc/arch-release ]; then
     mkinitcpio -P &> /dev/null
@@ -56,7 +55,7 @@ sleep 1s
 sleep 1s
   clear
 fi
-
+fi
 sh ./grub_revert.sh
 
 # clears the screen on the terminal if that wasn't obvious
@@ -306,6 +305,8 @@ case $grubpci in
     printf "be sure to reboot if you have blacklisted any GPU's\n"
     printf "or if you made changes to your grub.\n"
     echo "Not inserting PCI ID into GRUB, have a nice day."
+    sleep 5 &&
+    clear
     exit 0
     ;;
 esac
@@ -327,6 +328,8 @@ esac
       printf "be sure to reboot if you have blacklisted any GPU's\n"
       printf "press Y to reboot now and n to reboot later.\n"
       echo "Reboot not performed, have a nice day."
+      sleep 5 &&
+      clear
       exit 0
       ;;
   esac
