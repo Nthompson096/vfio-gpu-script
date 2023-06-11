@@ -12,7 +12,7 @@ This is what you'll need:
 
 * virt-manager
 * qemu-full 
-* a rom for your GPU you can use a rom dumping utility or simply look on the internet [you can also check my previous repo on how to do so](https://github.com/Nthompson096/KVM-GPU-Passthrough#creating-your-rom).
+* a rom for your GPU you can use a rom dumping utility or simply look on the internet [check the newly created page on the wiki](https://github.com/Nthompson096/vfio-gpu-script/wiki/Useful-guides-from-my-other-github-repo.).
 
 For trying to pass though Nvidia you'll need to apply this patch and install either of these kernels listed in this wiki [if you use arch](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch))
 And for the sake of it, here's a video from [Pavol Elsig](https://www.youtube.com/watch?v=JBEzshbGPhQ) which should be an easier guide also a level1tech guide [here](https://forum.level1techs.com/t/how-to-apply-acs-override-patch-kubuntu-18-10-kernel-4-18-16/134204/2).
