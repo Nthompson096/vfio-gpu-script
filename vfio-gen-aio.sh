@@ -36,7 +36,7 @@ fi
 
 # vfio file for when the user had inputted it's GPU IDS, will ask if
 # if it wants it deleted
-
+# Will ask if the user wants the VFIO file deleted, if so it will update the Initramfs/mkinitcpio, feel free to comment out lines 45-51 or make your own fork of this repo!!
 if [ -f /etc/modprobe.d/vfio.conf ]; then
   read -p "Do you want to delete the VFIO file? [y/n] " answer
 if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
