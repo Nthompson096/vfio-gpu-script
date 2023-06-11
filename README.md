@@ -59,7 +59,7 @@ Be sure to check the man pages, or install [tldr](https://tldr.sh/).
 UPDATE: This is now inside the script; this will happen when it asks you if you'd like to delete the vfio file and you'd enter [y]es
 Also be sure to have `MODULES=(amdgpu)` inside your `/etc/mkinitcpio.conf` for this to work.
 
-# For Fedora
+# Patching your qemu-binary
 
 You would need to install vim-common for this
 
