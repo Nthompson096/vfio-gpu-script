@@ -4,7 +4,7 @@
 
 # auto installs (windows)
 
-[A small guide here. which will link to a detailed repo](https://github.com/Nthompson096/vfio-gpu-script/wiki/From-creating-an-automatic-install-(windows))
+[A small guide here. which will link to a detailed wiki](https://github.com/Nthompson096/vfio-gpu-script/wiki/From-creating-an-automatic-install-(windows))
 
 # vfio-gpu-script
 A gpu script partially by AI, useful for blacklisting AMD or NVIDIA GPU's on a dual GPU machine for virtualization (AMD/NVidia).
