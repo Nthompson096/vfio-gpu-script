@@ -1,3 +1,7 @@
+# Check my troubleshooting guide for possible fixes to some issues.
+
+[the guide/wiki](https://github.com/Nthompson096/vfio-gpu-script/wiki/troubleshooting) This will be updated if I find anything so I won't clobber up the readme.
+
 # vfio-gpu-script
 A gpu script partially by AI, useful for blacklisting AMD or NVIDIA GPU's on a dual GPU machine for virtualization (AMD/NVidia).
 
@@ -142,35 +146,3 @@ An example of a fstab drive; change it to what you will but it seems to work pre
 * NVIDIA+Debian=supported
 * NVIDIA+Fedora=Supported
 * NVIDIA+Windows=Supported
-
-# BONUS playing on linux and windows troubleshooting
-
-### Proton has failed to start
-
-Try setting your client to beta and restart, it should work then, if you'd want you may switch it back.
-
-### Existing installation from a NTFS drive
-
-If you ever want to use an exisitng installation on your NTFS drive you'll need to do the following
-
-* Rename the Steam folder to Steam-old, create a new Steam folder
-* Open steam
-* Point the new steam install directory to your "new" install directory on the old drive
-* Close Steam
-* Delete the Steam folder DO NOT DELETE THE STEAM-OLD FOLDER
-* Rename the steam-old folder to Steam
-* ???
-* Profit
-
-### Write issues
-
-There could be issues with NTFS; firstly see if you can verify the steam files, if this doesn't work then you'll have to run chkdsk with windows in recovery mode; you should know how to pass a phyical drive by now.
-
-[Here's an article on how to do so](https://support.microsoft.com/en-us/windows/find-safe-mode-and-other-startup-settings-in-windows-10-7551aac3-21b5-c646-06ee-31e0e6a5e4dc)
-
-for chkdsk you'll need to run `diskpart` to figure out the drive and then `list volume`
-
-then for example:
-`chkdsk G: /F /R`
-
-you may also need to defrag the drive.
