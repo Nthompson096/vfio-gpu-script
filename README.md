@@ -98,7 +98,7 @@ You'll also need to set your processor to QEMU and clear the current processor c
 
 <br>
 
-for Arch edit kvm.conf inside /etc/modprobe.d/:
+for Arch edit kvm.conf inside /etc/modprobe.d/. this is for BSOD inside windows host-passthough cpu modes:
 
     options kvm ignore_msrs=1
 
