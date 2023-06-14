@@ -96,6 +96,12 @@ You'll also need to set your processor to QEMU and clear the current processor c
 
     sudo grubby --update-kernel=ALL --args='kvm.ignore_msrs=1'
 
+<br>
+
+for Arch edit kvm.conf inside /etc/modprobe.d/:
+
+    options kvm ignore_msrs=1
+
 If all else fails you'll probably have to either set seliunx to ``permissive`` or ``disabled`` it inside ```/etc/selinux/config```
 
 You can also set it wil grubby, that's inside the selinux config, will not cover here though.
