@@ -193,7 +193,7 @@ esac
 
 echo "required for vfio.conf"
 echo "Do you want to update your initramfs/mkinitcpio?"
-echo "Enter Y to update, or Anything else to cancel:"
+echo "(y/enter for no):"
 read confirm
 
 if [[ $confirm == "Y" || $confirm == "y" ]]; then
