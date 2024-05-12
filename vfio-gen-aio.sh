@@ -323,7 +323,7 @@ esac
       ;;
   *)
       # If the user does not want to reboot, exit the script
-      printf "\nGrub bootloader has been modified successfully, reboot time!\nthe reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
+      printf "the reverted grub file is saved as /etc/default/grub.bak\nand the blacklists are in /etc/modprobe/\n"
       printf "be sure to reboot if you have blacklisted any GPU's\n"
       printf "press Y to reboot now and n to reboot later.\n"
       echo "Reboot not performed, have a nice day."
