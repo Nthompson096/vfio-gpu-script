@@ -92,5 +92,20 @@ if [ -f /etc/default/grub.bak ]; then
         echo "Unable to revert grub for unknown Linux distribution: $os_name"
         ;;
     esac
+
+    read -p "Do you want to reboot? [y/n] " answer
+
+if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+  # code to execute if the answer is "yes"
+  echo "rebooting...."
+  sleep 5s
+  reboot
+else
+  # code to execute if the answer is "no"
+  echo "Exiting script."
+  sleep 1s
+  clear
+  exit
+  fi
   fi
 fi
